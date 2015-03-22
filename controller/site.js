@@ -24,9 +24,11 @@ exports.login = function(req, res, next) {
 }
 
 exports.logout = function(req, res, next) {
-    delete res.locals.session;
-    delete res.req.session;
-    res.redirect('/');
+    req.session.destroy(function() {
+        res.locals.session.destroy();
+        console.log(res.locals.session);
+        res.redirect('/');
+    });
 }
 
 exports.callback = function(req, res, next) {
