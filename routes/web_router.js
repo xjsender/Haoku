@@ -11,6 +11,7 @@ module.exports = function(app) {
 
     app.get('/', site.index);
     app.post('/login', site.login);
+    app.get('/logout', site.logout);
     app.get('/about', site.about);
     app.get('/oauth/callback', site.callback);
     app.get('/account/o', account.list);

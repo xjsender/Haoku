@@ -23,6 +23,12 @@ exports.login = function(req, res, next) {
     res.redirect(oauth2.getAuthorizationUrl({scope: 'api'}));
 }
 
+exports.logout = function(req, res, next) {
+    delete res.locals.session;
+    delete res.req.session;
+    res.redirect('/');
+}
+
 exports.callback = function(req, res, next) {
     console.log(req.session.oauth2);
     var conn = new jsforce.Connection({

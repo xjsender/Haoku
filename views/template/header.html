@@ -61,13 +61,11 @@
                 </ul>
 
                 <ul class="nav navbar-nav navbar-right">
-                    <li><a href="#" onclick="$('#oauth-dialog').modal('show');">Login</a></li>
-                    <li class="profile dropdown" style="display:none;">
-                        <a href="#" onclick="if(confirm('Logout ?')) location.href='/logout';">
-                            <span class="profile-icon"></span>
-                            <span class="profile-name"></span>
-                        </a>
-                    </li>
+                    <% if (!session.oauth2) { %>
+                        <li><a href="#" onclick="$('#oauth-dialog').modal('show');">Login</a></li>
+                    <%} else {%>
+                        <li><a href="#" onclick="if(confirm('Logout ?')) location.href='/logout';">Logout</a></li>
+                    <%}%>
                 </ul>
             </div>
             <div id="oauth-dialog" class="modal fade">
