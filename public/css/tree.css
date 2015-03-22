@@ -1,0 +1,65 @@
+.jstree-default .jstree-node {
+    margin-left: 15px !important;
+}
+
+.main {
+    overflow: auto;
+}
+
+.sidebar {
+    float: left;
+    width: 30% !important;
+    margin-top: 10px;
+    min-height: 400px;
+    background-color: #e8e8e8;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    border-radius: 5px;
+}
+
+.sidebar_links {
+    text-align: right;
+    padding: 10px 10px 6px;
+    font-size: 82%;
+    background-color: #e6e6e7;
+    color: #015ba7;
+    border-bottom: 1px solid #d9d9d9;
+    moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    border-radius: 5px
+}
+
+.sidebar_links a {
+    margin: 0 4px;
+    text-decoration: none;
+    color: #015ba7
+}
+
+.sidebar_links input {
+    margin-left: 10px;
+    padding-top: 0;
+    float: left;
+    border-radius: 5px;
+    moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    border: 1px solid silver;
+}
+
+.sidebar_title {
+    margin: 14px 0;
+    margin-left: 10px;
+}
+
+.sidebar_title h2 {
+    padding-left: 10px;
+}
+
+.content {
+    width: 68%;
+    float: left;
+    padding: 10px;
+}
+
+.tabs {
+    clear: both;
+}

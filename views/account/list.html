@@ -1,0 +1,136 @@
+<% include ../template/header.html %>
+<div class="container"> 
+    <div class="sidebar">
+        <div class="sidebar_links">
+            <input type="text" id="search" value="" class="input" placeholder="Search Node" />
+            <a href="#" id="expandAll"><b>Expand All</b></a>
+            |
+            <a href="#" id="collapseAll"><b>Collapse All</b></a>
+        </div>
+
+        <div class="sidebar_title">
+            <h2>Account</h2>
+        </div>
+
+        <div class="sidebar_content">
+            <div id="tree">
+            </div>
+        </div>
+    </div>
+
+    <div class="content">
+    </div>
+</div>
+
+<link href="/css/sweet-alert.css" rel="stylesheet" media="screen" />
+<link href="/css/themes/default/style.min.css" rel="stylesheet" media="screen" />
+<link href="/css/tree.css" rel="stylesheet" media="screen" />
+
+<style type="text/css">
+    #search {
+        margin-left: 10px;
+        padding-top: 0;
+        float: left;
+        border-radius:5px; 
+        moz-border-radius: 5px; 
+        -webkit-border-radius: 5px;
+        border:1px solid silver;
+    }
+</style>
+
+<script src="/js/sweet-alert.min.js"></script>
+<script src="/js/jquery.min.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/jstree.min.js"></script>
+
+<script type="text/javascript">
+    $(document).ready(function() {
+        var data = <%- JSON.stringify(data) %>;
+        console.log(data);
+        $("#tree").jstree({
+            "plugins": ["wholerow", "contextmenu", "dnd", "search"],
+            "search": {
+                "show_only_matches" : true // Show only matched node
+            },
+            "core": {
+                check_callback: true,
+                animation: 0,
+                multiple: false, 
+                themes : { 
+                    responsive : false
+                },
+                data: data
+            },
+            contextmenu: {
+                "items": function(node) {
+                    return {
+                        "view": {
+                            label: "View Node",
+                            action: function(obj) {
+                                window.open("/account/" + node.id);
+                            }
+                        },
+                        "create": {
+                            label: "Create Sub Node",
+                            action: function() {
+                                createNode(node);
+                            }
+                        },
+                        "delete": {
+                            label: "Delete Node",
+                            action: function() {
+                                sweetAlert({
+                                    title: "Are you sure",
+                                    text: "Delete " + node.text + "?",
+                                    type: "warning",
+                                    showCancelButton: true,
+                                    confirmButtonColor: "#DD6B55",
+                                    confirmButtonText: "Yes",
+                                    closeOnConfirm: true,
+                                    html: false
+                                }, function() {
+                                    deleteNode(node);
+                                });
+                            },
+                            separator_before: true
+                        }
+                    }
+                }
+            }
+        });
+
+        var to = false;
+        $('#search').keyup(function() {
+            $("#tree").jstree("open_all");
+            if (to) {
+                clearTimeout(to);
+            }
+            to = setTimeout(function() {
+                var v = $('#search').val();
+                $('#tree').jstree(true).search(v);
+            }, 250);
+        });
+
+        // open all on load (OPTIONAL)
+        $(".sidebar_links").on("click", "#expandAll", function() {
+            $("#tree").jstree("open_all");
+        })
+
+        // collapse all on load (OPTIONAL)
+        $(".sidebar_links").on("click", "#collapseAll", function() {
+            $("#tree").jstree("close_all");
+        })
+
+         // do something on node selected
+        $("#tree").bind("select_node.jstree", function (event, data) {
+            // open all unopened parents of the selected node (OPTIONAL)
+            // data.rslt.obj.parents('.jstree-closed').each(function () {
+            //     data.inst.open_node(this);
+            // });
+            
+            var node_id = data.selected[0];
+            $(".content").text("Chosen AccountId: " + node_id)
+        });
+    });
+</script>
+<% include ../template/footer.html %>

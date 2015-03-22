@@ -1,0 +1,9 @@
+{
+  "name": "node jstree",
+  "description": "Sample NodeJS Jstree",
+  "repository": "https://github.com/xjsender/node-jstree",
+  "website": "https://github.com/xjsender",
+  "logo": "https://avatars3.githubusercontent.com/u/1450977?v=3&s=40",
+  "keywords": ["node", "jstree"],
+  "env": {}
+}
