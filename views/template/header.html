@@ -13,6 +13,11 @@
     <!-- Bootstrap -->
     <link href="/css/bootstrap.min.css" rel="stylesheet" media="screen">
     <link href="/css/signin.css" rel="stylesheet" media="screen">
+
+    <script src="/js/sweet-alert.min.js"></script>
+    <script src="/js/jquery.min.js"></script>
+    <script src="/js/bootstrap.min.js"></script>
+    <script src="/js/jstree.min.js"></script>
 </head>
 
 <body>
@@ -56,25 +61,48 @@
                 </ul>
 
                 <ul class="nav navbar-nav navbar-right">
-                    <li><a href="/login">Login</a>
-                    </li>
-                    <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" 
-                            role="button" aria-expanded="false">Dropdown <span class="caret"></span></a>
-                        <ul class="dropdown-menu" role="menu">
-                            <li><a href="#">Action</a>
-                            </li>
-                            <li><a href="#">Another action</a>
-                            </li>
-                            <li><a href="#">Something else here</a>
-                            </li>
-                            <li class="divider"></li>
-                            <li><a href="#">Separated link</a>
-                            </li>
-                        </ul>
+                    <li><a href="#" onclick="$('#oauth-dialog').modal('show');">Login</a></li>
+                    <li class="profile dropdown" style="display:none;">
+                        <a href="#" onclick="if(confirm('Logout ?')) location.href='/logout';">
+                            <span class="profile-icon"></span>
+                            <span class="profile-name"></span>
+                        </a>
                     </li>
                 </ul>
             </div>
-            <!--/.nav-collapse -->
+            <div id="oauth-dialog" class="modal fade">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                            <h4 class="modal-title">Connect to Salesforce</h4>
+                        </div>
+                        <div class="modal-body">
+                            <form class="form-horizontal" method="post" action="/login">
+                                <div class="control-group">
+                                    <select id="login_url" class="form-control" name="login_url">
+                                        <option value="https://login.salesforce.com">Production (login.salesforce.com)</option>
+                                        <option value="https://test.salesforce.com">Sandbox (test.salesforce.com)</option>
+                                    </select>
+
+                                    <input type="text" id="client_id" name="client_id" 
+                                        class="form-control" placeholder="Client ID" required="true" autofocus="true">
+
+                                    <input type="text" id="redirect_uri" name="redirect_uri" 
+                                        class="form-control" placeholder="Redirect URI" required="true">
+                                </div>
+
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                                    <button type="submit" class="btn btn-primary connect">Connect</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    <!-- /.modal-content -->
+                </div>
+                <!-- /.modal-dialog -->
+            </div>
+            <!-- /.modal -->
         </div>
     </nav>

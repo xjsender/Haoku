@@ -4,7 +4,8 @@ var express = require("express")
     , router = express.Router()
 
 router.get('/', site.index);
-router.get('/login', site.login);
+router.post('/login', site.login);
+router.get('/about', site.about);
 router.get('/oauth/callback', site.callback);
 router.get('/account/o', account.list);
 router.get('/account/:id', account.view);
