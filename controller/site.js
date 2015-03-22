@@ -13,6 +13,7 @@ exports.login = function(req, res, next) {
     req.session.oauth2 = {
         loginUrl: req.body.login_url,
         clientId: req.body.client_id,
+        clientSecret: req.body.client_secret,
         redirectUri: req.body.redirect_uri
     }
 
