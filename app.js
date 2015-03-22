@@ -3,9 +3,10 @@ var express = require("express")
     , path = require('path')
     , jsforce = require("jsforce")
     , underscore = require("underscore")
-    , webRouter = require("./routers/web_router")
+    , webRouter = require("./routes/web_router")
     , session = require("express-session")
     , bodyParser = require("body-parser")
+    , router = express.Router()
     , app = express();
 
 app.set("view engine", "html");
@@ -24,7 +25,9 @@ app.use(bodyParser.urlencoded({
     extended: true
 }));
 
-app.use('/', webRouter);
+// app.use('/', webRouter);
+webRouter(app);
+app.use(router);
 
 var server = app.listen(process.env.PORT || 3000, function() {
     var host = server.address().address
