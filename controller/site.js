@@ -1,5 +1,7 @@
 var jsforce = require("jsforce")
     , session = require("express-session");
+    
+var oauth2;
 
 exports.index = function(req, res, next) {
     res.render('index');
