@@ -1,8 +1,6 @@
 var jsforce = require("jsforce")
     , session = require("express-session");
 
-var oauth2;
-
 exports.index = function(req, res, next) {
     res.render('index');
 }
@@ -12,19 +10,24 @@ exports.about = function(req, res, next) {
 }
 
 exports.login = function(req, res, next) {
-    oauth2 = new jsforce.OAuth2({
+    req.session.oauth2 = {
         loginUrl: req.body.login_url,
         clientId: req.body.client_id,
         redirectUri: req.body.redirect_uri
-    })
+    }
 
-    console.log(oauth2);
+    console.log(req.session.oauth2);
 
+    oauth2 = new jsforce.OAuth2(req.session.oauth2)
     res.redirect(oauth2.getAuthorizationUrl({scope: 'api'}));
 }
 
 exports.callback = function(req, res, next) {
-    var conn = new jsforce.Connection({oauth2: oauth2});
+    console.log(req.session.oauth2);
+    var conn = new jsforce.Connection({
+        oauth2: req.session.oauth2
+    });
+
     var code = req.query.code;
     conn.authorize(code, function(err, userInfo) {
         if (err) { return console.error(err); }
