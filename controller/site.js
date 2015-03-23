@@ -1,5 +1,6 @@
 var jsforce = require("jsforce")
-    , session = require("express-session");
+    , session = require("express-session")
+    , config = require("../config")
 
 exports.index = function(req, res, next) {
     res.render('index');
@@ -14,7 +15,7 @@ exports.login = function(req, res, next) {
         loginUrl: req.body.login_url,
         clientId: req.body.client_id,
         clientSecret: req.body.client_secret,
-        redirectUri: req.body.redirect_uri
+        redirectUri: config.redirect_uri
     }
 
     console.log(req.session.oauth2);
@@ -32,7 +33,6 @@ exports.logout = function(req, res, next) {
 }
 
 exports.callback = function(req, res, next) {
-    console.log(req.session.oauth2);
     var conn = new jsforce.Connection({
         oauth2: req.session.oauth2
     });
@@ -44,5 +44,30 @@ exports.callback = function(req, res, next) {
         req.session.accessToken = conn.accessToken;
         req.session.instanceUrl = conn.instanceUrl;
         res.redirect('/');
+    });
+}
+
+exports.query = function(req, res, next) {
+    res.render("query");
+}
+
+exports.doQuery = function(req, res, next) {
+    var soql = req.query.soql;
+
+    if (!req.session || !req.session.accessToken) {
+        return res.redirect('/');
+    }
+
+    var conn = new jsforce.Connection({
+        accessToken: req.session.accessToken,
+        instanceUrl: req.session.instanceUrl
+    });
+
+    conn.query(soql, function(err, resp) {
+        if (err) return next(err);
+
+        res.render("query", {
+            "records": resp.records
+        });
     });
 }

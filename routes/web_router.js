@@ -14,6 +14,8 @@ module.exports = function(app) {
     app.get('/logout', site.logout);
     app.get('/about', site.about);
     app.get('/oauth/callback', site.callback);
+    app.get('/query', site.query);
+    app.post('/query', site.doQuery);
     app.get('/account/o', account.list);
     app.get('/account/:id', account.view);
 }

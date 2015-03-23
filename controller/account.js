@@ -4,7 +4,7 @@ var _ = require("underscore")._
 
 exports.list = function(req, res, next) {
     if (!req.session || !req.session.accessToken) {
-        return res.redirect('/login');
+        return res.redirect('/');
     }
 
     var conn = new jsforce.Connection({
