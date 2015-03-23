@@ -12,7 +12,7 @@
     <title>Tree View</title>
     <!-- Bootstrap -->
     <link href="/css/bootstrap.min.css" rel="stylesheet" media="screen">
-    <link href="/css/signin.css" rel="stylesheet" media="screen">
+    <link href="/css/default.css" rel="stylesheet" media="screen">
 
     <script src="/js/sweet-alert.min.js"></script>
     <script src="/js/jquery.min.js"></script>
@@ -22,94 +22,96 @@
 
 <body class="top">
     <!-- Fixed navbar -->
-    <nav class="navbar navbar-default navbar-fixed-top">
-        <div class="container">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-                    <span class="sr-only">Toggle navigation</span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                <a class="navbar-brand" href="/">Tree</a>
-            </div>
-
-            <div id="navbar" class="navbar-collapse collapse">
-                <ul class="nav navbar-nav">
-                    <li><a href="/">Home</a></li>
-                    <li><a href="/query">Query</a></li>
-                    <li><a href="/account/o">Account</a></li>
-                    <li><a href="/about">About</a></li>
-                    <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Dropdown <span class="caret"></span></a>
-                        <ul class="dropdown-menu" role="menu">
-                            <li><a href="#">Action</a>
-                            </li>
-                            <li><a href="#">Another action</a>
-                            </li>
-                            <li><a href="#">Something else here</a>
-                            </li>
-                            <li class="divider"></li>
-                            <li class="dropdown-header">Nav header</li>
-                            <li><a href="#">Separated link</a>
-                            </li>
-                            <li><a href="#">One more separated link</a>
-                            </li>
-                        </ul>
-                    </li>
-                </ul>
-
-                <ul class="nav navbar-nav navbar-right">
-                    <% if (!session.accessToken) { %>
-                        <li><a href="#" onclick="$('#oauth-dialog').modal('show');">Login</a></li>
-                    <%} else {%>
-                        <li><a href="#" onclick="if(confirm('Logout ?')) location.href='/logout';">Logout</a></li>
-                    <%}%>
-                </ul>
-            </div>
-            <div id="oauth-dialog" class="modal fade">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                            <h4 class="modal-title">Connect to Salesforce</h4>
-                        </div>
-                        <div class="modal-body">
-                            <form method="post" action="/login">
-                                <div class="form-group">
-                                    <label for="instanceUrl">Login URL</label>
-                                    
-                                    <select id="login_url" class="form-control" name="login_url">
-                                        <option value="https://login.salesforce.com">Production (login.salesforce.com)</option>
-                                        <option value="https://test.salesforce.com">Sandbox (test.salesforce.com)</option>
-                                    </select>
-                                </div>
-
-                                <div class="form-group">
-                                    <label for="clientId">Client ID</label>
-                                    <input type="text" id="client_id" name="client_id" 
-                                        class="form-control" placeholder="Client ID" required="true" autofocus="true"
-                                        value="3MVG9Y6d_Btp4xp5NwcRLAU5Ct0KYYb5tqzhfcmTuZ2jFVmU2Ak5uGx0p1auRZLptPq4IB396N4pQ2X7BK5J7" / >
-                                </div>
-
-                                <div class="form-group">
-                                    <label for="clientSecret">Client Secret</label>
-                                    <input type="text" id="client_secret" name="client_secret" 
-                                        class="form-control" placeholder="Client Secret" required="true" autofocus="true"
-                                        value="5291655085722911176" />
-                                </div>
-
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-                                    <button type="submit" class="btn btn-primary connect">Connect</button>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-                    <!-- /.modal-content -->
+    <div id="navigation" class="navbar navbar-fixed-top navbar-default" role="navigation">
+        <nav class="navbar navbar-default navbar-fixed-top">
+            <div class="container">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="/">Tree</a>
                 </div>
-                <!-- /.modal-dialog -->
+
+                <div id="navbar" class="navbar-collapse collapse">
+                    <ul class="nav navbar-nav">
+                        <li><a href="/">Home</a></li>
+                        <li><a href="/query">Query</a></li>
+                        <li><a href="/account/o">Account</a></li>
+                        <li><a href="/about">About</a></li>
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Dropdown <span class="caret"></span></a>
+                            <ul class="dropdown-menu" role="menu">
+                                <li><a href="#">Action</a>
+                                </li>
+                                <li><a href="#">Another action</a>
+                                </li>
+                                <li><a href="#">Something else here</a>
+                                </li>
+                                <li class="divider"></li>
+                                <li class="dropdown-header">Nav header</li>
+                                <li><a href="#">Separated link</a>
+                                </li>
+                                <li><a href="#">One more separated link</a>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+
+                    <ul class="nav navbar-nav navbar-right">
+                        <% if (!session.accessToken) { %>
+                            <li><a href="#" onclick="$('#oauth-dialog').modal('show');">Login</a></li>
+                        <%} else {%>
+                            <li><a href="#" onclick="if(confirm('Logout ?')) location.href='/logout';">Logout</a></li>
+                        <%}%>
+                    </ul>
+                </div>
+                <div id="oauth-dialog" class="modal fade">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                <h4 class="modal-title">Connect to Salesforce</h4>
+                            </div>
+                            <div class="modal-body">
+                                <form method="post" action="/login">
+                                    <div class="form-group">
+                                        <label for="instanceUrl">Login URL</label>
+                                        
+                                        <select id="login_url" class="form-control" name="login_url">
+                                            <option value="https://login.salesforce.com">Production (login.salesforce.com)</option>
+                                            <option value="https://test.salesforce.com">Sandbox (test.salesforce.com)</option>
+                                        </select>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="clientId">Client ID</label>
+                                        <input type="text" id="client_id" name="client_id" 
+                                            class="form-control" placeholder="Client ID" required="true" autofocus="true"
+                                            value="3MVG9Y6d_Btp4xp5NwcRLAU5Ct0KYYb5tqzhfcmTuZ2jFVmU2Ak5uGx0p1auRZLptPq4IB396N4pQ2X7BK5J7" / >
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="clientSecret">Client Secret</label>
+                                        <input type="text" id="client_secret" name="client_secret" 
+                                            class="form-control" placeholder="Client Secret" required="true" autofocus="true"
+                                            value="5291655085722911176" />
+                                    </div>
+
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                                        <button type="submit" class="btn btn-primary connect">Connect</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                        <!-- /.modal-content -->
+                    </div>
+                    <!-- /.modal-dialog -->
+                </div>
+                <!-- /.modal -->
             </div>
-            <!-- /.modal -->
-        </div>
-    </nav>
+        </nav>
+    </div>

@@ -1,14 +1,20 @@
 <% include ./template/header.html %>
-<div class="container">
-    <div class="bs-example" data-example-id="textarea-form-control">
-        <form method="post" action="/query">
-            <textarea class="form-control" rows="3" name="soql" placeholder="Textarea"></textarea>
-        </form>
-    </div>
+<div id="content">
+    <div class="container">
+        <div class="bs-example" data-example-id="textarea-form-control">
+            <form method="post" action="/query">
+                <div class="form-group">
+                    <label for="comment">Input your SOQL:</label>
+                    <textarea class="form-control" rows="5" name="soql" placeholder="Textarea"></textarea>
+                    <button type="submit" class="btn btn-primary connect">Query</button>
+                </div>
+            </form>
+        </div>
 
-    <div class="panel panel-default">
-        <div class="panel-body">
-            <%- records %>
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <%- records %>
+            </div>
         </div>
     </div>
 </div>

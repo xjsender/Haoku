@@ -1,0 +1,14 @@
+#navigation {
+    background-color: #fff;
+    margin-bottom: 0;
+    -webkit-box-shadow: rgba(27, 27, 27, 0.4) 1px 1px 10px;
+    box-shadow: rgba(27,27,27,0.4) 1px 1px 10px;
+    border: 0px none;
+    overflow: hidden;
+}
+
+#content {
+    color: #646464;
+    background-color: #fff;
+    padding: 60px 0;
+}
