@@ -76,21 +76,32 @@
                             <h4 class="modal-title">Connect to Salesforce</h4>
                         </div>
                         <div class="modal-body">
-                            <form class="form-horizontal" method="post" action="/login">
-                                <div class="control-group">
+                            <form method="post" action="/login">
+                                <div class="form-group">
+                                    <label for="instanceUrl">Instance URL</label>
+                                    
                                     <select id="login_url" class="form-control" name="login_url">
                                         <option value="https://login.salesforce.com">Production (login.salesforce.com)</option>
                                         <option value="https://test.salesforce.com">Sandbox (test.salesforce.com)</option>
                                     </select>
+                                </div>
 
+                                <div class="form-group">
+                                    <label for="clientId">Client ID</label>
                                     <input type="text" id="client_id" name="client_id" 
                                         class="form-control" placeholder="Client ID" required="true" autofocus="true"
                                         value="3MVG9Y6d_Btp4xp5NwcRLAU5Ct0KYYb5tqzhfcmTuZ2jFVmU2Ak5uGx0p1auRZLptPq4IB396N4pQ2X7BK5J7" / >
+                                </div>
 
+                                <div class="form-group">
+                                    <label for="clientSecret">Client Secret</label>
                                     <input type="text" id="client_secret" name="client_secret" 
                                         class="form-control" placeholder="Client Secret" required="true" autofocus="true"
                                         value="5291655085722911176" / >
+                                </div>
 
+                                <div class="form-group">
+                                    <label for="redirectUri">Redirect URI</label>
                                     <input type="text" id="redirect_uri" name="redirect_uri" 
                                         class="form-control" placeholder="Redirect URI" required="true"
                                         value="https://node-jstree.herokuapp.com/oauth/callback"/ >
