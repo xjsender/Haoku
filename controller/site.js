@@ -48,7 +48,9 @@ exports.callback = function(req, res, next) {
 }
 
 exports.query = function(req, res, next) {
-    res.render("query");
+    res.render("query", {
+        records: []
+    });
 }
 
 exports.doQuery = function(req, res, next) {
@@ -67,7 +69,7 @@ exports.doQuery = function(req, res, next) {
         if (err) return next(err);
 
         res.render("query", {
-            "records": resp.records
+            records: resp.records
         });
     });
 }
