@@ -2,18 +2,40 @@
 <div id="content">
     <div class="container">
         <div class="bs-example" data-example-id="textarea-form-control">
+            <h2>Salesforce Record Query</h2>
+
+            <% if (hasMessage) { %>
+                <div>
+                    <div class="alert alert-danger" role="alert">
+                        <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+                        <span class="sr-only">Error:</span>
+                        <%= messages %>
+                    </div>
+                </div>
+            <%}%>
+            
+            <p>Please input your query statement here:</p>
             <form method="post" action="/query">
                 <div class="form-group">
-                    <label for="comment">Input your SOQL:</label>
-                    <textarea class="form-control" rows="5" name="soql" placeholder="Textarea"></textarea>
-                    <button type="submit" class="btn btn-primary connect">Query</button>
+                    <textarea class="form-control" rows="5" id="soql" name="soql" 
+                        required="true" placeholder="SELECT Id FROM Account LIMIT 50"></textarea>
+
+                    <div class="btn-group" style="margin-top: 10px;">
+                        <button type="submit" class="btn btn-primary connect">
+                            <span class="glyphicon glyphicon-search"></span> Query
+                        </button>
+                    </div>
                 </div>
             </form>
         </div>
 
         <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">Query Result:</h3>
+            </div>
+
             <div class="panel-body">
-                <%- records %>
+                <%- html_table %>
             </div>
         </div>
     </div>

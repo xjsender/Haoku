@@ -1,7 +1,20 @@
 <% include ./template/header.html %>
 <div id="content">
     <div class="container">
-        <h1>index</h1>
+        <div id="content">
+            <div class="container">
+                <h2>Index Page</h2>
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Session Information: </h3>
+                    </div>
+
+                    <div class="panel-body">
+                        <%- JSON.stringify(session, null, '\t') %>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 <% include ./template/footer.html %>

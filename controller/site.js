@@ -1,8 +1,25 @@
 var jsforce = require("jsforce")
     , session = require("express-session")
-    , config = require("../config")
+    , _ = require("underscore")._
+    , array2table = require("../lib/array2table");
 
 exports.index = function(req, res, next) {
+    if (req.session.accessToken) {
+        var conn = new jsforce.Connection({
+            accessToken: req.session.accessToken,
+            instanceUrl: req.session.instanceUrl
+        });
+
+        soql = "SELECT UserName FROM User WHERE Id = '{0}'".format(req.session.userId);
+        conn.query(soql , function(err, resp) {
+            if (err) return next(err);
+
+            req.session.userName = resp.records[0].Username;
+            res.locals.session = req.session;
+        });
+    }
+
+    console.log(req.session);
     res.render('index');
 }
 
@@ -10,51 +27,14 @@ exports.about = function(req, res, next) {
     res.render('about');
 }
 
-exports.login = function(req, res, next) {
-    req.session.oauth2 = {
-        loginUrl: req.body.login_url,
-        clientId: req.body.client_id,
-        clientSecret: req.body.client_secret,
-        redirectUri: config.redirect_uri
-    }
-
-    console.log(req.session.oauth2);
-
-    oauth2 = new jsforce.OAuth2(req.session.oauth2)
-    res.redirect(oauth2.getAuthorizationUrl({scope: 'api'}));
-}
-
-exports.logout = function(req, res, next) {
-    req.session.destroy(function() {
-        res.locals.session.destroy();
-        console.log(res.locals.session);
-        res.redirect('/');
-    });
-}
-
-exports.callback = function(req, res, next) {
-    var conn = new jsforce.Connection({
-        oauth2: req.session.oauth2
-    });
-
-    var code = req.query.code;
-    conn.authorize(code, function(err, userInfo) {
-        if (err) { return console.error(err); }
- 
-        req.session.accessToken = conn.accessToken;
-        req.session.instanceUrl = conn.instanceUrl;
-        res.redirect('/');
-    });
-}
-
 exports.query = function(req, res, next) {
     res.render("query", {
-        records: []
+        html_table: []
     });
 }
 
 exports.doQuery = function(req, res, next) {
-    var soql = req.query.soql;
+    var soql = req.body.soql;
 
     if (!req.session || !req.session.accessToken) {
         return res.redirect('/');
@@ -66,10 +46,19 @@ exports.doQuery = function(req, res, next) {
     });
 
     conn.query(soql, function(err, resp) {
-        if (err) return next(err);
+        if (err) {
+            res.locals.hasMessage = true;
+            res.locals.messages = err;
 
+            res.render("query", {
+                html_table: ""
+            })
+        }
+
+        html_table = array2table(resp.records, 'queryResult', 'table', req.session);
+        
         res.render("query", {
-            records: resp.records
+            html_table: html_table
         });
     });
 }

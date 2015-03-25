@@ -25,6 +25,21 @@ app.use(bodyParser.urlencoded({
     extended: true
 }));
 
+// expose the "messages" local variable when views are rendered
+app.use(function(req, res, next) {
+    var msgs = req.session.messages || [];
+
+    // expose "messages" local variable
+    res.locals.message = msgs;
+
+    // expose "hasMessages"
+    res.locals.hasMessage = !!msgs.length;
+
+    // res.locals.user = req.session.user;
+
+    next();
+});
+
 // app.use('/', webRouter);
 webRouter(app);
 app.use(router);
@@ -32,5 +47,5 @@ app.use(router);
 var server = app.listen(process.env.PORT || 3000, function() {
     var host = server.address().address
     var port = server.address().port
-    console.log('Example Node Tree listening at http://%s:%s', host, port)
+    console.log('Node Tree listening at http://%s:%s', host, port)
 })
