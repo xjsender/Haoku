@@ -1,0 +1,87 @@
+<% include ./template/header.html %>
+
+<link href="/css/json.css" rel="stylesheet" media="screen">
+<script src="/js/jsonformatter.js"></script>
+<div class="container">
+    <div class="bs-example" data-example-id="textarea-form-control">
+        <div class="col-sm-12">
+            <h2>Execute Rest</h2>
+        </div>
+
+        <form method="post" action="/rest">
+            <div class="form-group col-sm-5">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Place HTTP method, REST URI and Body here: </h3>
+                    </div>
+
+                    <div class="panel-body">
+                        <div class="btn-group" data-toggle="buttons">
+                            <label class="btn btn-default">
+                                <input type="radio" id="get" name="rest_method" checked="checked" value="get" /> Get
+                            </label>
+
+                            <label class="btn btn-default">
+                                <input type="radio" id="post" name="rest_method" value="post" /> Post
+                            </label>
+
+                            <label class="btn btn-default">
+                                <input type="radio" id="put" name="rest_method" value="put" /> Put
+                            </label>
+
+                            <label class="btn btn-default">
+                                <input type="radio" id="patch" name="rest_method" value="patch" /> Patch
+                            </label>
+
+                            <label class="btn btn-default active">
+                                <input type="radio" id="delete" name="rest_method" value="delete" /> Delete
+                            </label>
+
+                            <label class="btn btn-default">
+                                <input type="radio" id="header" name="rest_method" value="header" /> Header
+                            </label> 
+                        </div>
+
+                        <BR />
+                        <BR />
+
+                        <div class="row">
+                            <div class="col-sm-8">
+                                <textarea class="form-control" rows="1" cols="25" id="rest_uri" name="rest_uri" 
+                                    required="true"><%- rest_uri %></textarea>
+                            </div>
+
+                            <div class="col-sm-3">
+                                <div class="btn-group">
+                                    <button type="submit" class="btn btn-primary connect">
+                                        <span class="glyphicon glyphicon-ok"></span> Execute
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <BR />
+
+                        <div id="rest_body_div">
+                            <textarea class="form-control" rows="10" cols="30" id="rest_body" name="rest_body" 
+                                placeholder="Place your body here" required="true"></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-sm-7">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Execution Result:</h3>
+                    </div>
+
+                    <div class="panel-body">
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div style="height: 50px;" />
+<% include ./template/footer.html %>

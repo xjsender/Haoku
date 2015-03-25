@@ -4,27 +4,15 @@ var jsforce = require("jsforce")
     , array2table = require("../lib/array2table");
 
 exports.index = function(req, res, next) {
-    if (req.session.accessToken) {
-        var conn = new jsforce.Connection({
-            accessToken: req.session.accessToken,
-            instanceUrl: req.session.instanceUrl
-        });
-
-        soql = "SELECT UserName FROM User WHERE Id = '{0}'".format(req.session.userId);
-        conn.query(soql , function(err, resp) {
-            if (err) return next(err);
-
-            req.session.userName = resp.records[0].Username;
-            res.locals.session = req.session;
-        });
-    }
-
-    console.log(req.session);
     res.render('index');
 }
 
 exports.about = function(req, res, next) {
     res.render('about');
+}
+
+exports.json = function(req, res, next) {
+    res.render('json');
 }
 
 exports.query = function(req, res, next) {

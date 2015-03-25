@@ -1,6 +1,7 @@
 var express = require("express")
     , site = require("../controller/site")
     , login = require("../controller/login")
+    , rest = require("../controller/rest")
     , account = require("../controller/object/account");
 
 module.exports = function(app) {
@@ -13,6 +14,11 @@ module.exports = function(app) {
     app.get('/about', site.about);
     app.get('/query', site.query);
     app.post('/query', site.doQuery);
+
+    // http://download.csdn.net/detail/wolf_410/5927367
+    app.get('/json', site.json);
+    app.get('/rest', rest.rest);
+    app.post('/rest', rest.executeRest);
 
     app.post('/login', login.login);
     app.get('/logout', login.logout);
