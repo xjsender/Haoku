@@ -35,6 +35,9 @@ app.use(function(req, res, next) {
     // expose "hasMessages"
     res.locals.hasMessage = !!msgs.length;
 
+    // expose "notLogin"
+    res.locals.notLogin = !req.session || !req.session.accessToken;
+
     // res.locals.user = req.session.user;
 
     next();

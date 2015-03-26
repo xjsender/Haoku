@@ -1,32 +1,38 @@
 <% include ../template/header.html %>
 <div id="content">
-    <div class="container"> 
-        <div class="sidebar">
-            <div class="sidebar_links">
-                <input type="text" id="search" value="" class="input" placeholder="Search Node" />
-                <a href="#" id="expandAll"><b>Expand All</b></a>
-                |
-                <a href="#" id="collapseAll"><b>Collapse All</b></a>
-            </div>
+    <div class="container">
+        <h2>Account Tree View</h2>
+        
+        <% if (notLogin) { %>
+            <% include ../template/notLogin.html %>
+        <%} else { %>
+            <div class="sidebar">
+                <div class="sidebar_links">
+                    <input type="text" id="search" value="" class="input" placeholder="Search Node" />
+                    <a href="#" id="expandAll"><b>Expand All</b></a>
+                    |
+                    <a href="#" id="collapseAll"><b>Collapse All</b></a>
+                </div>
 
-            <div class="sidebar_title">
-                <h2>Account</h2>
-            </div>
+                <div class="sidebar_title">
+                    <h2>Account</h2>
+                </div>
 
-            <div class="sidebar_content">
-                <div id="tree">
+                <div class="sidebar_content">
+                    <div id="tree">
+                    </div>
                 </div>
             </div>
-        </div>
 
-        <div class="content">
-        </div>
+            <div class="content">
+            </div>
+        <%}%>
     </div>
 </div>
 
-<link href="/css/sweet-alert.css" rel="stylesheet" media="screen" />
-<link href="/css/themes/default/style.min.css" rel="stylesheet" media="screen" />
-<link href="/css/tree.css" rel="stylesheet" media="screen" />
+<link href="/sweetalert/styles/sweet-alert.css" rel="stylesheet" media="screen" />
+<link href="/jstree/styles/themes/default/style.min.css" rel="stylesheet" media="screen" />
+<link href="/jstree/styles/tree.css" rel="stylesheet" media="screen" />
 
 <style type="text/css">
     #search {

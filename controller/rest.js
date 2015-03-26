@@ -7,13 +7,41 @@ exports.rest = function(req, res, next) {
         instanceUrl: req.session.instanceUrl
     });
 
-    console.log(conn);
     res.render('rest', {
-        rest_uri: "/services/data/v" + conn.version
+        rest_uri: "/services/data/v" + conn.version + "/sobjects",
+        resp: {}
     });
 }
 
 exports.executeRest = function(req, res, next) {
-    console.log(req.body);
-    res.render('rest');
+    var _request = {
+        url: req.body.rest_uri,
+        method: req.body.rest_method,
+        body: req.body.rest_body,
+        headers : {
+            "Content-Type" : "application/json"
+        }
+    }
+
+    var conn = new jsforce.Connection({
+        accessToken: req.session.accessToken,
+        instanceUrl: req.session.instanceUrl
+    });
+
+    conn.request(_request, function(err, resp) {
+        if (err) {
+            res.locals.hasMessage = true;
+            res.locals.messages = err;
+
+            return res.render('rest', {
+                rest_uri: _request.url,
+                resp: []
+            });
+        }
+
+        res.render('rest', {
+            rest_uri: _request.url,
+            resp: resp
+        });
+    })
 }

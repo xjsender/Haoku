@@ -4,7 +4,9 @@ var _ = require("underscore")._
 
 exports.list = function(req, res, next) {
     if (!req.session || !req.session.accessToken) {
-        return res.redirect('/');
+        res.render('account/list', {
+            data : []
+        });
     }
 
     var conn = new jsforce.Connection({

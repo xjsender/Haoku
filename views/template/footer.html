@@ -1,8 +1,25 @@
+        
+
+        <!-- CSS -->
+        <link href="/common/styles/default.css" rel="stylesheet" media="screen">
+        <link href="/highlight/styles/default.css" rel="stylesheet" media="screen">
+        <link href="/sweetalert/styles/sweet-alert.css" rel="stylesheet" media="screen">
+
+        <!-- JS -->
+        <script src="/sweetalert/js/sweet-alert.min.js"></script>
+        <script src="/bootstrap/js/bootstrap.min.js"></script>
+        <script src="/jstree/js/jstree.min.js"></script>
+        <script src="/common/js/ajax.js"></script>
+        <script src="/highlight/highlight.js"></script>
         <script>
             $(function() {
                 var url = document.location.pathname;
-                
                 $('.nav a[href="'+url+'"]').parent().addClass('active');
+
+                hljs.configure({languages: ['javascript', 'json', 'html']});
+                $('pre code').each(function(i, element) {
+                    hljs.highlightBlock(element);
+                });
             });
         </script>
     </body>

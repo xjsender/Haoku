@@ -1,43 +1,56 @@
 <% include ./template/header.html %>
 <div id="content">
     <div class="container">
-        <div class="bs-example" data-example-id="textarea-form-control">
-            <h2>Salesforce Record Query</h2>
+        <div class="col-sm-12">
+            <h2>Execute Query</h2>
+        </div>
 
-            <% if (hasMessage) { %>
-                <div>
-                    <div class="alert alert-danger" role="alert">
-                        <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
-                        <span class="sr-only">Error:</span>
-                        <%= messages %>
+        <% if (notLogin) { %>
+            <% include ./template/notLogin.html %>
+        <%} else { %>
+            <form name="form" method="post" action="/query">
+                <div class="form-group col-sm-12">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">Place your SOQL here: </h3>
+                        </div>
+
+                        <div class="panel-body">
+                            <div class="row">
+                                <div class="col-sm-8" style="margin-top: 5px;">
+                                    <textarea class="form-control" rows="5" id="soql" name="soql" 
+                                        required="true" placeholder="SELECT Id FROM Account LIMIT 50"></textarea>
+                                </div>
+
+                                <div class="col-sm-4">
+                                    <div class="btn-group" style="margin-top: 5px;">
+                                        <button type="submit" class="btn btn-primary connect">
+                                            <span class="glyphicon glyphicon-search"></span> Query
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
-            <%}%>
-            
-            <p>Please input your query statement here:</p>
-            <form method="post" action="/query">
-                <div class="form-group">
-                    <textarea class="form-control" rows="5" id="soql" name="soql" 
-                        required="true" placeholder="SELECT Id FROM Account LIMIT 50"></textarea>
 
-                    <div class="btn-group" style="margin-top: 10px;">
-                        <button type="submit" class="btn btn-primary connect">
-                            <span class="glyphicon glyphicon-search"></span> Query
-                        </button>
+                <div class="col-sm-12">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">Execution Result:</h3>
+                        </div>
+
+                        <div class="panel-body">
+                            <% if (hasMessage) {%>
+                                <% include ./template/messages.html %>
+                            <%} else {%>
+                                <%- html_table %>
+                            <%}%>
+                        </div>
                     </div>
                 </div>
             </form>
-        </div>
-
-        <div class="panel panel-default">
-            <div class="panel-heading">
-                <h3 class="panel-title">Query Result:</h3>
-            </div>
-
-            <div class="panel-body">
-                <%- html_table %>
-            </div>
-        </div>
+        <%}%>
     </div>
 </div>
 <% include ./template/footer.html %>
