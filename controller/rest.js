@@ -14,8 +14,9 @@ exports.rest = function(req, res, next) {
 }
 
 exports.executeRest = function(req, res, next) {
+    var rest_uri = req.body.rest_uri;
     var _request = {
-        url: req.body.rest_uri,
+        url: rest_uri,
         method: req.body.rest_method,
         body: req.body.rest_body,
         headers : {
@@ -34,13 +35,13 @@ exports.executeRest = function(req, res, next) {
             res.locals.messages = err;
 
             return res.render('rest', {
-                rest_uri: _request.url,
+                rest_uri: rest_uri,
                 resp: []
             });
         }
 
         res.render('rest', {
-            rest_uri: _request.url,
+            rest_uri: rest_uri,
             resp: resp
         });
     })
