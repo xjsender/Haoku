@@ -1,6 +1,7 @@
 var express = require("express")
-    , site = require("../controller/site")
+    , entry = require("../controller/entry")
     , login = require("../controller/login")
+    , query = require("../controller/query")
     , rest = require("../controller/rest")
     , account = require("../controller/object/account");
 
@@ -10,16 +11,20 @@ module.exports = function(app) {
         next();
     });
 
-    app.get('/', site.index);
-    app.get('/about', site.about);
-    app.get('/query', site.query);
-    app.post('/query', site.doQuery);
+    app.get('/', entry.index);
+    app.get('/about', entry.about);
+
+    // Query routes
+    app.get('/query', query.query);
+    app.post('/query', query.doQuery);
 
     // http://download.csdn.net/detail/wolf_410/5927367
-    app.get('/json', site.json);
+    // REST routes
+    app.get('/json', entry.json);
     app.get('/rest', rest.rest);
     app.post('/rest', rest.executeRest);
 
+    // Login routes
     app.post('/login', login.login);
     app.get('/logout', login.logout);
     app.get('/oauth/callback', login.callback);

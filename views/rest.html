@@ -17,27 +17,27 @@
 
                     <div class="panel-body">
                         <div class="btn-group" data-toggle="buttons">
-                            <label class="btn btn-default active" onclick="$('#rest_body_div').hide();">
-                                <input type="radio" id="get" name="rest_method" checked="checked" value="get" /> Get
+                            <label class="radioBtn btn btn-default active">
+                                <input type="radio" id="get" name="rest_method" value="get" checked="true" /> Get
                             </label>
 
-                            <label class="btn btn-default" onclick="$('#rest_body_div').show();">
+                            <label class="radioBtn btn btn-default">
                                 <input type="radio" id="post" name="rest_method" value="post" /> Post
                             </label>
 
-                            <label class="btn btn-default" onclick="$('#rest_body_div').show();">
+                            <label class="radioBtn btn btn-default">
                                 <input type="radio" id="put" name="rest_method" value="put" /> Put
                             </label>
 
-                            <label class="btn btn-default" onclick="$('#rest_body_div').show();">
+                            <label class="radioBtn btn btn-default">
                                 <input type="radio" id="patch" name="rest_method" value="patch" /> Patch
                             </label>
 
-                            <label class="btn btn-default" onclick="$('#rest_body_div').hide();">
+                            <label class="radioBtn btn btn-default">
                                 <input type="radio" id="delete" name="rest_method" value="delete" /> Delete
                             </label>
 
-                            <label class="btn btn-default" onclick="$('#rest_body_div').hide();">
+                            <label class="radioBtn btn btn-default">
                                 <input type="radio" id="head" name="rest_method" value="head" /> Head
                             </label> 
                         </div>
@@ -50,7 +50,7 @@
 
                             <div class="col-sm-4">
                                 <div class="btn-group" style="margin-top: 5px;">
-                                    <button type="submit" class="btn btn-primary connect">
+                                    <button type="button" id="executeRest" class="btn btn-primary connect">
                                         <span class="glyphicon glyphicon-ok"></span> Execute
                                     </button>
                                 </div>
@@ -58,8 +58,8 @@
                         </div>
 
                         <div id="rest_body_div" class="row" style="display: none; ">
-                            <div class="col-sm-12" style="margin-top:5px;">
-                                <textarea class="form-control" rows="10" cols="30" id="rest_body" name="rest_body" 
+                            <div class="col-sm-8" style="margin-top:5px;">
+                                <textarea class="form-control" rows="10" cols="10" id="rest_body" name="rest_body" 
                                     placeholder="Place your body here"></textarea>
                             </div>
                         </div>
@@ -115,25 +115,56 @@
                             </div>
 
                             <div class="btn-group">
-                                <input type="checkbox" id="quoteKeys" checked="true" onclick="quoteKeysClicked()"> Quote</input>
+                                <input type="checkbox" id="quoteKeys" checked="true" 
+                                    onclick="quoteKeysClicked()">Quote</input>
                             </div>
                         </div>
 
                         <div class="col-md-12">
                             <textarea class="form-control" style="display:none" rows="0" id="RawJson" name="RawJson" 
-                                required="true" placeholder="Input your json here"><%- JSON.stringify(resp, null, '  ') %></textarea>
+                                required="true" placeholder="Input your json here"></textarea>
                         </div>
 
                         <div class="col-md-12">
                             <div class="Canvas" id="Canvas"></div>
                         </div>
-                        <script>process()</script>
                     <%}%>
                 </div>
             </div>
         </div>
     <%}%>
 </div>
+
+<script>
+    $(function() {
+        $(".radioBtn").on("click", function() {
+            rest_method = $(this).children().val();
+            if ($.inArray(rest_method, ["post", "patch", "put"]) != -1) {
+                $("#rest_body_div").show();
+            }
+            else {
+                $("#rest_body_div").hide();
+            }
+        })
+
+        $("#executeRest").on("click", function() {
+            rest_method = $(".radioBtn.active").children().val();
+            rest_url = $("#rest_uri").val();
+            rest_body = $("#rest_body").val();
+            
+            var body = {
+                method: rest_method,
+                url: rest_url,
+                body: rest_body
+            }
+
+            $.post('/rest', body, function(data) {
+                $("#RawJson").val(JSON.stringify(data, null, "  "));
+                process();
+            });
+        });
+    });
+</script>
 
 <div style="height: 50px;" />
 <% include ./template/footer.html %>

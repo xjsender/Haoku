@@ -14,11 +14,10 @@ exports.rest = function(req, res, next) {
 }
 
 exports.executeRest = function(req, res, next) {
-    var rest_uri = req.body.rest_uri;
     var _request = {
-        url: rest_uri,
-        method: req.body.rest_method,
-        body: req.body.rest_body,
+        url: req.body.url,
+        method: req.body.method,
+        body: req.body.body,
         headers : {
             "Content-Type" : "application/json"
         }
@@ -30,19 +29,7 @@ exports.executeRest = function(req, res, next) {
     });
 
     conn.request(_request, function(err, resp) {
-        if (err) {
-            res.locals.hasMessage = true;
-            res.locals.messages = err;
-
-            return res.render('rest', {
-                rest_uri: rest_uri,
-                resp: []
-            });
-        }
-
-        res.render('rest', {
-            rest_uri: rest_uri,
-            resp: resp
-        });
+        if (err) return res.send(err);
+        res.send(resp)
     })
 }

@@ -18,6 +18,7 @@
     "express": "^4.12.3",
     "express-session": "^1.10.4",
     "jsforce": "^1.4.1",
+    "request": "^2.54.0",
     "underscore": "^1.8.2"
   }
 }

@@ -24,7 +24,7 @@
 
                                 <div class="col-sm-4">
                                     <div class="btn-group" style="margin-top: 5px;">
-                                        <button type="submit" class="btn btn-primary connect">
+                                        <button type="button" id="executeQuery" class="btn btn-primary connect">
                                             <span class="glyphicon glyphicon-search"></span> Query
                                         </button>
                                     </div>
@@ -40,12 +40,7 @@
                             <h3 class="panel-title">Execution Result:</h3>
                         </div>
 
-                        <div class="panel-body">
-                            <% if (hasMessage) {%>
-                                <% include ./template/messages.html %>
-                            <%} else {%>
-                                <%- html_table %>
-                            <%}%>
+                        <div class="panel-body" id="query_result">
                         </div>
                     </div>
                 </div>
@@ -53,4 +48,63 @@
         <%}%>
     </div>
 </div>
+
+<link id="style" href="/columns/css/clean.css" rel="stylesheet" media="screen">
+<script src="/columns/js/jquery.columns.min.js"></script>
+<script>
+    var records = [];
+    $("#executeQuery").on("click", function() {
+        soql = $("#soql").val();
+        body = {soql: soql};
+
+        $.post('/query', body, function(resp) {
+            // Error Response
+            if (type.isString(resp)) {
+                $('#query_result').html(error_div.format(resp));
+                return;
+            }
+
+            if (resp.totalSize == 0) {
+                $('#query_result').html("No matched records");
+                return;
+            }
+
+            // Keep this variable
+            records = resp.records;
+
+            schema = [];
+            Object.keys(resp.records[0]).forEach(function(key) {
+                if (key != "attributes") {
+                    schema.push({
+                        "header": key, 
+                        "key": key,
+                        "template": function(value) {
+                            if (type.isNull(value)) {
+                                return "";
+                            }
+                            else if (type.isObject(value) && value.records) {
+                                return "<pre>" + JSON.stringify(value.records, null, "  ") + "</pre>";
+                            }
+                            else {
+                                var idRegExp = new RegExp(/[a-zA-Z0-9]{15,18}/ig);
+                                if (idRegExp.test(value)) {
+                                    return "<a href='/{0}'>{0}</a>".format(value);
+                                }
+
+                                return value;
+                            }
+                        }
+                    })
+                }
+            });
+    
+            $('#query_result').data('columns', null);
+            $('#query_result').columns({
+                size: 10,
+                data: resp.records,
+                schema: schema
+            }); 
+        });
+    });
+</script>
 <% include ./template/footer.html %>

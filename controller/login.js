@@ -1,6 +1,7 @@
 var jsforce = require("jsforce")
     , session = require("express-session")
-    , config = require("../config");
+    , config = require("../config")
+    , util = require("./util")
 
 exports.login = function(req, res, next) {
     req.session.oauth2 = {

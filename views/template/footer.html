@@ -1,4 +1,13 @@
-        
+        <!-- AJAX Loading Part -->
+        <div class="modal"></div>
+        <script>
+            $body = $("body");
+
+            $(document).on({
+                ajaxStart: function() { $body.addClass("loading");},
+                ajaxStop: function() { $body.removeClass("loading");}
+            });
+        </script>
 
         <!-- CSS -->
         <link href="/common/styles/default.css" rel="stylesheet" media="screen">
@@ -9,8 +18,8 @@
         <script src="/sweetalert/js/sweet-alert.min.js"></script>
         <script src="/bootstrap/js/bootstrap.min.js"></script>
         <script src="/jstree/js/jstree.min.js"></script>
-        <script src="/common/js/ajax.js"></script>
         <script src="/highlight/highlight.js"></script>
+        <script src="/common/js/util.js"></script>
         <script>
             $(function() {
                 var url = document.location.pathname;

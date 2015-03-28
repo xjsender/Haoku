@@ -16,9 +16,10 @@ app.set('port', process.env.PORT || 3000);
 
 app.use(express.static("public"));
 app.use(session({
+    secret: 'hao.liu',
     resave: false, // don't save session if unmodified
     saveUninitialized: false, // don't create session until something stored
-    secret: 'some secret here'
+    cookie: { maxAge: 900000 }
 }));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
@@ -43,7 +44,6 @@ app.use(function(req, res, next) {
     next();
 });
 
-// app.use('/', webRouter);
 webRouter(app);
 app.use(router);
 
