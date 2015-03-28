@@ -78,7 +78,7 @@
                     <% if (hasMessage) {%>
                         <% include ./template/messages.html %>
                     <%} else {%>
-                        <div class="col-md-12">
+                        <div class="col-md-12" id="control" style="display: none;">
                             <div class="btn-group">
                                 <label class="btn btn-default btn-sm">
                                     <span id="TabSizeHolder">Indent
@@ -121,8 +121,8 @@
                         </div>
 
                         <div class="col-md-12">
-                            <textarea class="form-control" style="display:none" rows="0" id="RawJson" name="RawJson" 
-                                required="true" placeholder="Input your json here"></textarea>
+                            <textarea id="RawJson" class="form-control" style="display:none" rows="0" 
+                                name="RawJson" required="true"></textarea>
                         </div>
 
                         <div class="col-md-12">
@@ -158,8 +158,15 @@
                 body: rest_body
             }
 
-            $.post('/rest', body, function(data) {
-                $("#RawJson").val(JSON.stringify(data, null, "  "));
+            $.post('/rest', body, function(resp) {
+                if (type.isString(resp)) {
+                    $("#control").hide();
+                    $("#Canvas").html(error_div.format(resp));
+                    return;
+                }
+
+                $("#control").show();
+                $("#RawJson").val(JSON.stringify(resp, null, "  "));
                 process();
             });
         });

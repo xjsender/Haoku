@@ -30,9 +30,10 @@ var type = function (o){
     };
 });
 
-var error_div = '<div class="code-result alert alert-dismissable alert-danger">' + 
+var error_div = 
+    '<div class="alert alert-danger alert-dismissable" role="alert">' +
         '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>' +
-        '<div><strong class="title">Error :</strong></div><div class="output">' +
-            '<pre>{0}</pre>' +
-        '</div>' +
+        '<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>' +
+        '<span class="sr-only">Error:</span>' +
+        '{0}' +
     '</div>';

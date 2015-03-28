@@ -51,6 +51,7 @@
 
 <link id="style" href="/columns/css/clean.css" rel="stylesheet" media="screen">
 <script src="/columns/js/jquery.columns.min.js"></script>
+<script src="/underscore/underscore-min.js"></script>
 <script>
     var records = [];
     $("#executeQuery").on("click", function() {
@@ -83,7 +84,10 @@
                                 return "";
                             }
                             else if (type.isObject(value) && value.records) {
-                                return "<pre>" + JSON.stringify(value.records, null, "  ") + "</pre>";
+                                records = _.map(value.records, function(record) {
+                                    return _.omit(record, "attributes");
+                                });
+                                return "<pre>" + JSON.stringify(records, null, "  ") + "</pre>";
                             }
                             else {
                                 var idRegExp = new RegExp(/[a-zA-Z0-9]{15,18}/ig);

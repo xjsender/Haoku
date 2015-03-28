@@ -20,7 +20,7 @@ module.exports = function(app) {
 
     // http://download.csdn.net/detail/wolf_410/5927367
     // REST routes
-    app.get('/json', entry.json);
+    app.get('/jsonu', entry.json);
     app.get('/rest', rest.rest);
     app.post('/rest', rest.executeRest);
 
