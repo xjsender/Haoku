@@ -17,6 +17,7 @@ module.exports = function(app) {
     // Query routes
     app.get('/query', query.query);
     app.post('/query', query.doQuery);
+    app.delete('/:id/del', query.doDelete);
 
     // http://download.csdn.net/detail/wolf_410/5927367
     // REST routes

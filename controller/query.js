@@ -20,3 +20,18 @@ exports.doQuery = function(req, res, next) {
         res.send(resp);
     });
 }
+
+exports.doDelete = function(req, res, next) {
+    var record_id = req.params.id;
+
+    var conn = new jsforce.Connection({
+        accessToken: req.session.accessToken,
+        instanceUrl: req.session.instanceUrl
+    });
+
+    conn.sobject("Account").delete([record_id], function(err, resp) {
+        if (err) return res.send(err.toString());
+        console.log(resp);
+        res.send(resp);
+    });
+}

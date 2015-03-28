@@ -10,12 +10,8 @@
 #navigation .navbar-brand {
     display: inline-block;
     margin: 2px 10px 2px 2px;
-    background-image: url(../img/favicon.png);
-    background-repeat: no-repeat;
-    background-size: 65px 45px;
     width: 65px;
     height: 45px;
-    text-indent: -10000px;
 }
 
 #content {

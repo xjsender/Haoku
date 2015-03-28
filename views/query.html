@@ -73,42 +73,111 @@
             // Keep this variable
             records = resp.records;
 
-            schema = [];
-            Object.keys(resp.records[0]).forEach(function(key) {
-                if (key != "attributes") {
-                    schema.push({
-                        "header": key, 
-                        "key": key,
-                        "template": function(value) {
-                            if (type.isNull(value)) {
-                                return "";
-                            }
-                            else if (type.isObject(value) && value.records) {
-                                records = _.map(value.records, function(record) {
-                                    return _.omit(record, "attributes");
-                                });
-                                return "<pre>" + JSON.stringify(records, null, "  ") + "</pre>";
-                            }
-                            else {
-                                var idRegExp = new RegExp(/[a-zA-Z0-9]{15,18}/ig);
-                                if (idRegExp.test(value)) {
-                                    return "<a href='/{0}'>{0}</a>".format(value);
-                                }
-
-                                return value;
-                            }
-                        }
-                    })
-                }
-            });
-    
-            $('#query_result').data('columns', null);
-            $('#query_result').columns({
-                size: 10,
-                data: resp.records,
-                schema: schema
-            }); 
+            // Initiate table
+            initiateTable(records);
         });
     });
+
+    function initiateTable(records) {
+        schema = [];
+        keys = Object.keys(records[0]);
+        if (records[0].Id) {
+            schema.push({
+                "header": "Action",
+                "key": "Id",
+                "template": function(value) {
+                    return ('<a style="cursor: pointer;" href="/{0}/edit">Edit</a> | ' +
+                            '<a style="cursor: pointer;" id="{0}" onclick="deleteRow(this);">Del</a>').format(value);
+                }
+            })
+        }
+
+        Object.keys(records[0]).forEach(function(key) {
+            if (key != "attributes") {
+                schema.push({
+                    "header": key, 
+                    "key": key,
+                    "template": function(value) {
+                        if (type.isNull(value)) {
+                            return "";
+                        }
+                        else if (type.isObject(value) && value.records) {
+                            records = _.map(value.records, function(record) {
+                                return _.omit(record, "attributes");
+                            });
+
+                            return '<a style="cursor: pointer;" onclick="showDetail(this);">Show Detail</a><div style="display:none;"><pre>' + JSON.stringify(records, null, "  ") + '</pre></div>';
+                        }
+                        else {
+                            var idRegExp = new RegExp(/[a-zA-Z0-9]{15,18}/ig);
+                            if (idRegExp.test(value)) {
+                                return "<a href='/{0}'>{0}</a>".format(value);
+                            }
+
+                            return value;
+                        }
+                    }
+                })
+            }
+        });
+
+        $('#query_result').data('columns', null);
+        $('#query_result').columns({
+            size: 10,
+            data: records,
+            schema: schema
+        });
+    }
+
+    /**
+     * Delete Chosen Record
+     * @param     {DOM}    ele    Record Row
+     * @return
+     */
+    function deleteRow(ele) {
+        if (confirm("Are you sure you really want to delete this row?")) {
+            record_id = $(ele).attr("id")
+            $.ajax({
+                url: '/:{0}/del'.format(record_id),
+                type: 'DELETE',
+                success: function(resp) {
+                    if (resp.success) {
+                        records = _.reject(records, function(record) {
+                            return record.Id === record_id
+                        });
+
+                        initiateTable(records);
+
+                        alert("Delete Succeed");
+                    }
+                    else {
+                        alert(resp);
+                    }
+                }
+            });
+        }
+    }
+    
+    /**
+     * Show Detail if detail if not visible, else hide detail
+     * @param     {DOM Element}    ele   
+     * @return
+     */
+    function showDetail(ele) {
+        if ($(ele).text() == "Show Detail") {
+            $(ele).next().show();
+            $(ele).text("Hide Detail");
+        }
+        else {
+            $(ele).next().hide();
+            $(ele).text("Show Detail");
+        }
+    }
 </script>
+
+<style>
+    #query_result td {
+        vertical-align: top;
+    }
+</style>
 <% include ./template/footer.html %>
