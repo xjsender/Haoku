@@ -34,14 +34,12 @@ exports.callback = function(req, res, next) {
     
         req.session.accessToken = conn.accessToken;
         req.session.instanceUrl = conn.instanceUrl;
-        req.session.userId = conn.userInfo.id;
 
-        soql = "SELECT UserName FROM User WHERE Id = '{0}'".format(req.session.userId);
+        soql = "SELECT Id, FirstName, LastName, UserName FROM User " +  
+               "WHERE Id = '{0}'".format(userInfo.id);
         conn.query(soql , function(err, resp) {
             if (err) return next(err);
-
-            req.session.userName = resp.records[0].Username;
-
+            req.session.userInfo = resp.records[0];
             res.redirect("/");
         });
     });

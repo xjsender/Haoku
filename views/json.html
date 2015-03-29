@@ -3,58 +3,57 @@
 <div class="container">
     <form>
         <h2>JSON Formatter</h2>
-        <div class="btn-group">
-            <button type="button" class="btn btn-primary btn-sm" onclick="process()">
-                <span class="glyphicon glyphicon-ok"></span> Format
-            </button>
-        </div>
-
-        <div class="btn-group">
-            <label class="btn btn-default btn-sm">
-                <span id="TabSizeHolder">Indent
-                    <select id="TabSize" onchange="tabSizeChanged()">
-                        <option value="1" selected="true">1</option>
-                        <option value="2">2</option>
-                        <option value="3">3</option>
-                        <option value="4">4</option>
-                        <option value="5">5</option>
-                        <option value="6">6</option>
-                    </select>
-                </span>
-            </label>
-
-            <button type="button" class="btn btn-default btn-sm" onclick="selectAllClicked()">Select All</button>
-        </div>
-
-        <div class="btn-group">
-            <button type="button" class="btn btn-default btn-sm" onclick="expandAllClicked()">Expand All</button>
-            <button type="button" class="btn btn-default btn-sm" onclick="collapseAllClicked()">Collapse</button>
-            <button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-                <span class="caret"></span>
-                <span class="sr-only">Toggle Dropdown</span>
-            </button>
-            <ul class="dropdown-menu" role="menu">
-                <li><a href="javascript: void(0)" onclick="collapseLevel(2)">Level 2</a></li>
-                <li><a href="javascript: void(0)" onclick="collapseLevel(3)">Level 3</a></li>
-                <li><a href="javascript: void(0)" onclick="collapseLevel(4)">Level 4</a></li>
-                <li class="divider"></li>
-                <li><a href="javascript: void(0)" onclick="collapseLevel(5)">Level 5</a></li>
-                <li><a href="javascript: void(0)" onclick="collapseLevel(6)">Level 6</a></li>
-                <li><a href="javascript: void(0)" onclick="collapseLevel(7)">Level 7</a></li>
-            </ul>
-        </div>
-
-        <div class="btn-group" style="display:none">
-            <input type="checkbox" id="quoteKeys" checked="true" onclick="quoteKeysClicked()"> Quote</input>
-        </div>
 
         <div class="row" style="margin-top: 5px;">
-            <div class="col-md-4">
+            <div class="col-md-3">
+                <div class="btn-group btn-group-xs">
+                    <button type="button" class="btn btn-primary btn-sm" onclick="$('#result').show();process()">
+                        <span class="glyphicon glyphicon-ok"></span> Format
+                    </button>
+                </div>
                 <textarea class="form-control" rows="25" id="RawJson" name="RawJson" 
                     required="true" placeholder="Input your json here"></textarea>
             </div>
 
-            <div class="col-md-8">
+            <div class="col-md-9" id="result" style="display:none;">
+                <div class="btn-group btn-group-xs">
+                    <label class="btn btn-default btn-sm">
+                        <span id="TabSizeHolder">Indent
+                            <select id="TabSize" onchange="tabSizeChanged()">
+                                <option value="1" selected="true">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                                <option value="4">4</option>
+                                <option value="5">5</option>
+                                <option value="6">6</option>
+                            </select>
+                        </span>
+                    </label>
+
+                    <button type="button" class="btn btn-default btn-sm" onclick="selectAllClicked()">Select All</button>
+                </div>
+
+                <div class="btn-group btn-group-xs">
+                    <button type="button" class="btn btn-default btn-sm" onclick="expandAllClicked()">Expand All</button>
+                    <button type="button" class="btn btn-default btn-sm" onclick="collapseAllClicked()">Collapse</button>
+                    <button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                        <span class="caret"></span>
+                        <span class="sr-only">Toggle Dropdown</span>
+                    </button>
+                    <ul class="dropdown-menu" role="menu">
+                        <li><a href="javascript: void(0)" onclick="collapseLevel(2)">Level 2</a></li>
+                        <li><a href="javascript: void(0)" onclick="collapseLevel(3)">Level 3</a></li>
+                        <li><a href="javascript: void(0)" onclick="collapseLevel(4)">Level 4</a></li>
+                        <li class="divider"></li>
+                        <li><a href="javascript: void(0)" onclick="collapseLevel(5)">Level 5</a></li>
+                        <li><a href="javascript: void(0)" onclick="collapseLevel(6)">Level 6</a></li>
+                        <li><a href="javascript: void(0)" onclick="collapseLevel(7)">Level 7</a></li>
+                    </ul>
+                </div>
+
+                <div class="btn-group" style="display:none">
+                    <input type="checkbox" id="quoteKeys" checked="true" onclick="quoteKeysClicked()"> Quote</input>
+                </div>
                 <div class="Canvas" id="Canvas"></div>
             </div>
         </div>

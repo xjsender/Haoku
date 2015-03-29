@@ -49,11 +49,63 @@
     </div>
 </div>
 
+<div id="edit-dialog" class="modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-keyboard="true" data-show="true" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">Update Record</h4>
+            </div>
+            <div class="modal-body">
+                <form method="post" class="form-horizontal" action="/login">
+                    <div class="form-group">
+                        <label for="instanceUrl" class="control-label col-sm-3">Login URL: </label>
+                        
+                        <div class="col-sm-9">
+                            <select id="login_url" class="form-control" name="login_url">
+                                <option value="https://login.salesforce.com">Production</option>
+                                <option value="https://test.salesforce.com">Sandbox</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="clientSecret" class="control-label col-sm-3">Client Secret: </label>
+                        <div class="col-sm-9">
+                            <input type="text" id="client_secret" name="client_secret" 
+                                class="form-control" placeholder="Client Secret" 
+                                required="true" autofocus="true"
+                                value="6154018842396108114" />
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="clientId" class="control-label col-sm-3">Client ID: </label>
+                        <div class="col-sm-9">
+                            <textarea class="form-control" rows="5" id="client_id" style="resize: none;" 
+                                name="client_id" required="true" placeholder="Client ID">3MVG9Y6d_Btp4xp5NwcRLAU5Ct6gjXLPoSW43wDXmP0NR5siDu10UMOBMnPip9v02g_emnt1gJetjbnCH9N3y</textarea>
+                        </div>
+                    </div>
+                    
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-primary update">Update</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->
+
 <link id="style" href="/columns/css/clean.css" rel="stylesheet" media="screen">
 <script src="/columns/js/jquery.columns.min.js"></script>
 <script src="/underscore/underscore-min.js"></script>
 <script>
     var records = [];
+
     $("#executeQuery").on("click", function() {
         soql = $("#soql").val();
         body = {soql: soql};
@@ -81,13 +133,16 @@
     function initiateTable(records) {
         schema = [];
         keys = Object.keys(records[0]);
+        _type = records[0].attributes.type;
+        console.log(_type);
         if (records[0].Id) {
             schema.push({
                 "header": "Action",
                 "key": "Id",
-                "template": function(value) {
-                    return ('<a style="cursor: pointer;" href="/{0}/edit">Edit</a> | ' +
-                            '<a style="cursor: pointer;" id="{0}" onclick="deleteRow(this);">Del</a>').format(value);
+                "template": function(row, key) {
+                    value = row[key];
+                    return ('<a style="cursor: pointer;" href="{0}/{1}/edit">Edit</a> | ' +
+                            '<a style="cursor: pointer;" id="{1}" onclick="deleteRow(this);">Del</a>').format(_type, value);
                 }
             })
         }
@@ -97,23 +152,35 @@
                 schema.push({
                     "header": key, 
                     "key": key,
-                    "template": function(value) {
+                    "template": function(row, key) {
+                        value = row[key];
+
+                        // Null value
                         if (type.isNull(value)) {
                             return "";
                         }
+                        // Child to Parent
+                        else if (type.isObject(value) && !value.records) {
+                            value = _.omit(value, "attributes");
+                            return '<div><pre>' + JSON.stringify(value, null, "  ") + '</pre></div>';
+                        }
+                        // Parent to Children
                         else if (type.isObject(value) && value.records) {
                             records = _.map(value.records, function(record) {
                                 return _.omit(record, "attributes");
                             });
 
-                            return '<a style="cursor: pointer;" onclick="showDetail(this);">Show Detail</a><div style="display:none;"><pre>' + JSON.stringify(records, null, "  ") + '</pre></div>';
+                            return '<a style="cursor: pointer;" onclick="showDetail(this);">Show Detail(' + records.length + 
+                                   ')</a><div style="display:none;"><pre>' + JSON.stringify(records, null, "  ") + '</pre></div>';
                         }
                         else {
+                            // Id value
                             var idRegExp = new RegExp(/[a-zA-Z0-9]{15,18}/ig);
                             if (idRegExp.test(value)) {
-                                return "<a href='/{0}'>{0}</a>".format(value);
+                                return "<a href='/{0}/{1}'>{1}</a>".format(_type, value);
                             }
 
+                            // Other
                             return value;
                         }
                     }
@@ -164,13 +231,13 @@
      * @return
      */
     function showDetail(ele) {
-        if ($(ele).text() == "Show Detail") {
+        if ($(ele).text().startsWith("Show")) {
             $(ele).next().show();
-            $(ele).text("Hide Detail");
+            $(ele).text($(ele).text().replace("Show", "Hide"));
         }
         else {
             $(ele).next().hide();
-            $(ele).text("Show Detail");
+            $(ele).text($(ele).text().replace("Hide", "Show"));
         }
     }
 </script>
@@ -178,6 +245,10 @@
 <style>
     #query_result td {
         vertical-align: top;
+    }
+
+    #query_result table {
+        width: 100%;
     }
 </style>
 <% include ./template/footer.html %>

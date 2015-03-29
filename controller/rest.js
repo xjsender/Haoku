@@ -29,7 +29,6 @@ exports.executeRest = function(req, res, next) {
     });
 
     conn.request(_request, function(err, resp) {
-        console.log(resp);
         if (err) return res.send(err.toString());
         res.send(resp)
     })

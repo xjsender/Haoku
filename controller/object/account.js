@@ -64,3 +64,19 @@ exports.view = function(req, res, next) {
         })
     })
 }
+
+exports.edit = function(req, res, next) {
+    body = req.body;
+
+    var conn = new jsforce.Connection({
+        accessToken: req.session.accessToken,
+        instanceUrl: req.session.instanceUrl
+    });
+
+    var query = "SELECT Id, Name FROM Account WHERE Id = '" + accId + "'";
+    conn.query(query, function(err, accs) {
+        res.render("account/view", {
+            acc : JSON.stringify(accs.records[0])
+        })
+    })
+}

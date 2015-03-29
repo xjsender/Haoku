@@ -30,6 +30,7 @@ module.exports = function(app) {
     app.get('/logout', login.logout);
     app.get('/oauth/callback', login.callback);
 
-    app.get('/account/o', account.list);
-    app.get('/account/:id', account.view);
+    app.get('/Account/o', account.list);
+    app.get('/Account/:id', account.view);
+    app.get('/Account/:id/edit', account.edit);
 }

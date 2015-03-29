@@ -16,7 +16,7 @@
     <meta property="og:image" content="http://jsforce.github.io/images/jsforce-logo.png" />
     <meta property="og:site_name" content="JSforce" />
     <link rel="icon" href="/common/img/favicon.png">
-    <title>Tree View</title>
+    <title>Haoku</title>
 
     <link href="/bootstrap/styles/bootstrap.min.css" rel="stylesheet" media="screen">
     <link href="/json/json.css" rel="stylesheet" media="screen">
@@ -87,7 +87,7 @@
                             <li>
                                 <a href="#" id="logout">
                                     <span class="glyphicon glyphicon-log-in"></span> 
-                                    Logout as <%- session.userName %>
+                                    Logout as <%- session.userInfo.Username %>
                                 </a>
                             </li>
                         <%}%>
@@ -97,7 +97,7 @@
                     <div class="modal-dialog">
                         <div class="modal-content">
                             <div class="modal-header">
-                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                <button type="button" class="close" data-keyboard="true" data-show="true" data-dismiss="modal" aria-hidden="true">&times;</button>
                                 <h4 class="modal-title">Connect to Salesforce</h4>
                             </div>
                             <div class="modal-body">
@@ -126,15 +126,15 @@
                                     <div class="form-group">
                                         <label for="clientId" class="control-label col-sm-3">Callback URL: </label>
                                         <div class="col-sm-9">
-                                            <p class="form-control">http://localhost:3000/oauth/callback</p>
+                                            <p class="form-control-static">http://localhost:3000/oauth/callback</p>
                                         </div>
                                     </div>
 
                                     <div class="form-group">
                                         <label for="clientId" class="control-label col-sm-3">Client ID: </label>
                                         <div class="col-sm-9">
-                                            <textarea class="form-control" rows="5" id="client_id" name="client_id" 
-                                                required="true" placeholder="Client ID">3MVG9Y6d_Btp4xp5NwcRLAU5Ct6gjXLPoSW43wDXmP0NR5siDu10UMOBMnPip9v02g_emnt1gJetjbnCH9N3y</textarea>
+                                            <textarea class="form-control" rows="5" id="client_id" style="resize: none;" 
+                                                name="client_id" required="true" placeholder="Client ID">3MVG9Y6d_Btp4xp5NwcRLAU5Ct6gjXLPoSW43wDXmP0NR5siDu10UMOBMnPip9v02g_emnt1gJetjbnCH9N3y</textarea>
                                         </div>
                                     </div> -->
 
@@ -151,15 +151,15 @@
                                     <div class="form-group">
                                         <label for="clientId" class="control-label col-sm-3">Callback URL: </label>
                                         <div class="col-sm-9">
-                                            <p class="form-control">https://haoku.herokuapp.com/oauth/callback</p>
+                                            <p class="form-control-static">https://haoku.herokuapp.com/oauth/callback</p>
                                         </div>
                                     </div>
 
                                     <div class="form-group">
                                         <label for="clientId" class="control-label col-sm-3">Client ID: </label>
                                         <div class="col-sm-9">
-                                            <textarea class="form-control" rows="5" id="client_id" name="client_id" 
-                                                required="true" placeholder="Client ID">3MVG9Y6d_Btp4xp5NwcRLAU5Ct0KYYb5tqzhfcmTuZ2jFVmU2Ak5uGx0p1auRZLptPq4IB396N4pQ2X7BK5J7</textarea>
+                                            <textarea class="form-control" style="resize: none;" rows="5" id="client_id" 
+                                                name="client_id" required="true" placeholder="Client ID">3MVG9Y6d_Btp4xp5NwcRLAU5Ct0KYYb5tqzhfcmTuZ2jFVmU2Ak5uGx0p1auRZLptPq4IB396N4pQ2X7BK5J7</textarea>
                                         </div>
                                     </div>
 

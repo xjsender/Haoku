@@ -16,7 +16,7 @@
                     </div>
 
                     <div class="panel-body">
-                        <div class="btn-group" data-toggle="buttons">
+                        <div class="btn-group btn-group-xs" data-toggle="buttons">
                             <label class="radioBtn btn btn-default active">
                                 <input type="radio" id="get" name="rest_method" value="get" checked="true" /> Get
                             </label>
@@ -79,7 +79,7 @@
                         <% include ./template/messages.html %>
                     <%} else {%>
                         <div class="col-md-12" id="control" style="display: none;">
-                            <div class="btn-group">
+                            <div class="btn-group btn-group-xs">
                                 <label class="btn btn-default btn-sm">
                                     <span id="TabSizeHolder">Indent
                                         <select id="TabSize" onchange="tabSizeChanged()">
@@ -96,7 +96,7 @@
                                 <button type="button" class="btn btn-default btn-sm" onclick="selectAllClicked()">Select All</button>
                             </div>
 
-                            <div class="btn-group">
+                            <div class="btn-group btn-group-xs">
                                 <button type="button" class="btn btn-default btn-sm" onclick="expandAllClicked()">Expand All</button>
                                 <button type="button" class="btn btn-default btn-sm" onclick="collapseAllClicked()">Collapse</button>
                                 <button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
@@ -141,6 +141,7 @@
             rest_method = $(this).children().val();
             if ($.inArray(rest_method, ["post", "patch", "put"]) != -1) {
                 $("#rest_body_div").show();
+                $("#rest_body").focus();
             }
             else {
                 $("#rest_body_div").hide();
@@ -148,6 +149,13 @@
         })
 
         $("#executeRest").on("click", function() {
+            if ($("#rest_body").is(":visible") && !$("#rest_body").val()) {
+                $("#rest_body_div").addClass("has-error");
+                return false;
+            }
+            else {
+                $("#rest_body_div").removeClass("has-error");
+            }
             rest_method = $(".radioBtn.active").children().val();
             rest_url = $("#rest_uri").val();
             rest_body = $("#rest_body").val();
