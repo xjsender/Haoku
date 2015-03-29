@@ -8,7 +8,7 @@
     <% if (notLogin) { %>
         <% include ./template/notLogin.html %>
     <%} else { %>
-        <form name="form" method="post" action="/rest">
+        <form name="form">
             <div class="form-group col-sm-12">
                 <div class="panel panel-default">
                     <div class="panel-heading">
@@ -44,13 +44,13 @@
 
                         <div class="row">
                             <div class="col-sm-8" style="margin-top: 5px;">
-                                <textarea class="form-control" rows="1" cols="25" id="rest_uri" name="rest_uri" 
-                                    required="true"><%- rest_uri %></textarea>
+                                <input type="text" class="form-control" id="rest_uri" name="rest_uri" 
+                                    required="true" value="<%- rest_uri %>"></textarea>
                             </div>
 
                             <div class="col-sm-4">
                                 <div class="btn-group" style="margin-top: 5px;">
-                                    <button type="button" id="executeRest" class="btn btn-primary connect">
+                                    <button type="button" id="executeRest" tabindex="0" class="btn btn-primary connect">
                                         <span class="glyphicon glyphicon-ok"></span> Execute
                                     </button>
                                 </div>
@@ -148,6 +148,15 @@
             }
         })
 
+        $("#rest_uri").keydown(function(e) {
+            if (e.keyCode == 13) {
+                executeRest();
+                return false;
+            }
+
+            return true;
+        })
+
         $("#executeRest").on("click", function() {
             if ($("#rest_body").is(":visible") && !$("#rest_body").val()) {
                 $("#rest_body_div").addClass("has-error");
@@ -156,6 +165,11 @@
             else {
                 $("#rest_body_div").removeClass("has-error");
             }
+
+            executeRest();
+        })
+
+        function executeRest() {
             rest_method = $(".radioBtn.active").children().val();
             rest_url = $("#rest_uri").val();
             rest_body = $("#rest_body").val();
@@ -177,7 +191,7 @@
                 $("#RawJson").val(JSON.stringify(resp, null, "  "));
                 process();
             });
-        });
+        }
     });
 </script>
 

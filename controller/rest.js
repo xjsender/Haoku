@@ -23,6 +23,8 @@ exports.executeRest = function(req, res, next) {
         }
     }
 
+    console.log(_request);
+
     var conn = new jsforce.Connection({
         accessToken: req.session.accessToken,
         instanceUrl: req.session.instanceUrl

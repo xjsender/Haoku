@@ -4,9 +4,6 @@ var jsforce = require("jsforce")
     , util = require("./util");
 
 exports.login = function(req, res, next) {
-    console.log(req.hostname);
-    console.log(req.hostname === "localhost");
-    console.log(req.hostname == "localhost");
     oauth2 = req.hostname === "localhost" ? config.test : config.heroku;
     oauth2.loginUrl = req.body.login_url;
     req.session.oauth2 = oauth2;
