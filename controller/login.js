@@ -1,15 +1,17 @@
 var jsforce = require("jsforce")
     , session = require("express-session")
     , config = require("../config")
-    , util = require("./util")
+    , util = require("./util");
 
 exports.login = function(req, res, next) {
-    req.session.oauth2 = {
-        loginUrl: req.body.login_url,
-        clientId: req.body.client_id,
-        clientSecret: req.body.client_secret,
-        redirectUri: config.redirect_uri
-    }
+    console.log(req.hostname);
+    console.log(req.hostname === "localhost");
+    console.log(req.hostname == "localhost");
+    oauth2 = req.hostname === "localhost" ? config.test : config.heroku;
+    oauth2.loginUrl = req.body.login_url;
+    req.session.oauth2 = oauth2;
+
+    console.log(req.session.oauth2);
 
     oauth2 = new jsforce.OAuth2(req.session.oauth2)
     authorize_url = oauth2.getAuthorizationUrl({scope: 'full'});
