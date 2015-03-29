@@ -6,7 +6,9 @@ exports.index = function(req, res, next) {
     if (req.query && req.query.accessToken) {
         req.session.accessToken = req.query.accessToken;
         req.session.instanceUrl = req.query.instanceUrl;
-        req.session.userName = req.query.userName;
+        req.session.userInfo = {
+            Username: req.query.userName
+        };
     }
     
     res.render('index');
