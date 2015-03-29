@@ -1,14 +1,14 @@
 {
-  "name": "node-tree",
+  "name": "Haoku",
   "version": "1.0.0",
-  "description": "Node Tree",
+  "description": "Haoku",
   "main": "app.js",
   "scripts": {
     "test": "test.js"
   },
   "keywords": [
     "Node",
-    "Tree"
+    "Haoku"
   ],
   "author": "Hao Liu",
   "license": "MIT",
