@@ -65,6 +65,21 @@ exports.view = function(req, res, next) {
     })
 }
 
+exports.delete = function(req, res, next) {
+    var record_id = req.params.id;
+    console.log(req.params);
+
+    var conn = new jsforce.Connection({
+        accessToken: req.session.accessToken,
+        instanceUrl: req.session.instanceUrl
+    });
+
+    conn.sobject("Account").delete([record_id], function(err, resp) {
+        if (err) return res.send(err.toString());
+        res.send(resp);
+    });
+}
+
 exports.edit = function(req, res, next) {
     body = req.body;
 

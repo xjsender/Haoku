@@ -3,11 +3,13 @@ var express = require("express")
     , login = require("../controller/login")
     , query = require("../controller/query")
     , rest = require("../controller/rest")
-    , account = require("../controller/object/account");
+    , account = require("../controller/object/account")
+    , config = require("../config")
 
 module.exports = function(app) {
     app.use(function(req, res, next) {
         res.locals.session = req.session;
+        res.locals.fields = config.fields;
         next();
     });
 
@@ -17,7 +19,6 @@ module.exports = function(app) {
     // Query routes
     app.get('/query', query.query);
     app.post('/query', query.doQuery);
-    app.delete('/:id/del', query.doDelete);
 
     // http://download.csdn.net/detail/wolf_410/5927367
     // REST routes
@@ -33,4 +34,5 @@ module.exports = function(app) {
     app.get('/Account/o', account.list);
     app.get('/Account/:id', account.view);
     app.get('/Account/:id/edit', account.edit);
+    app.delete('/Account/:id/del', account.delete);
 }

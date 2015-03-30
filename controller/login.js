@@ -8,8 +8,6 @@ exports.login = function(req, res, next) {
     oauth2.loginUrl = req.body.login_url;
     req.session.oauth2 = oauth2;
 
-    console.log(req.session.oauth2);
-
     oauth2 = new jsforce.OAuth2(req.session.oauth2)
     authorize_url = oauth2.getAuthorizationUrl({scope: 'full'});
     res.redirect(authorize_url);

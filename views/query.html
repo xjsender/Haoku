@@ -49,62 +49,12 @@
     </div>
 </div>
 
-<div id="edit-dialog" class="modal fade">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-keyboard="true" data-show="true" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h4 class="modal-title">Update Record</h4>
-            </div>
-            <div class="modal-body">
-                <form method="post" class="form-horizontal" action="/login">
-                    <div class="form-group">
-                        <label for="instanceUrl" class="control-label col-sm-3">Login URL: </label>
-                        
-                        <div class="col-sm-9">
-                            <select id="login_url" class="form-control" name="login_url">
-                                <option value="https://login.salesforce.com">Production</option>
-                                <option value="https://test.salesforce.com">Sandbox</option>
-                            </select>
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="clientSecret" class="control-label col-sm-3">Client Secret: </label>
-                        <div class="col-sm-9">
-                            <input type="text" id="client_secret" name="client_secret" 
-                                class="form-control" placeholder="Client Secret" 
-                                required="true" autofocus="true"
-                                value="6154018842396108114" />
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="clientId" class="control-label col-sm-3">Client ID: </label>
-                        <div class="col-sm-9">
-                            <textarea class="form-control" rows="5" id="client_id" style="resize: none;" 
-                                name="client_id" required="true" placeholder="Client ID">3MVG9Y6d_Btp4xp5NwcRLAU5Ct6gjXLPoSW43wDXmP0NR5siDu10UMOBMnPip9v02g_emnt1gJetjbnCH9N3y</textarea>
-                        </div>
-                    </div>
-                    
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-                        <button type="submit" class="btn btn-primary update">Update</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-        <!-- /.modal-content -->
-    </div>
-    <!-- /.modal-dialog -->
-</div>
-<!-- /.modal -->
-
 <link id="style" href="/columns/css/clean.css" rel="stylesheet" media="screen">
 <script src="/columns/js/jquery.columns.min.js"></script>
 <script src="/underscore/underscore-min.js"></script>
 <script>
     var records = [];
+    var object_type = "";
 
     $("#executeQuery").on("click", function() {
         soql = $("#soql").val();
@@ -124,6 +74,7 @@
 
             // Keep this variable
             records = resp.records;
+            object_type = records[0].attributes.type;
 
             // Initiate table
             initiateTable(records);
@@ -132,28 +83,25 @@
 
     function initiateTable(records) {
         schema = [];
-        keys = Object.keys(records[0]);
-        _type = records[0].attributes.type;
-        console.log(_type);
-        if (records[0].Id) {
-            schema.push({
-                "header": "Action",
-                "key": "Id",
-                "template": function(row, key) {
-                    value = row[key];
-                    return ('<a style="cursor: pointer;" href="{0}/{1}/edit">Edit</a> | ' +
-                            '<a style="cursor: pointer;" id="{1}" onclick="deleteRow(this);">Del</a>').format(_type, value);
-                }
-            })
-        }
+        schema.push({
+            "header": "Action",
+            "key": "attributes",
+            "template": function(row, key) {
+                value = row[key];
+                id = parseId(row.attributes.url);
+                return ('<a style="cursor: pointer;" id="{0}" onclick="updateRow(this)">Edit</a> | ' +
+                        '<a style="cursor: pointer;" id="{0}" onclick="deleteRow(this);">Del</a>').format(id);
+            }
+        })
 
         Object.keys(records[0]).forEach(function(key) {
-            if (key != "attributes") {
+            if (key != "Id") {
                 schema.push({
                     "header": key, 
                     "key": key,
                     "template": function(row, key) {
                         value = row[key];
+                        id = parseId(row.attributes.url);
 
                         // Null value
                         if (type.isNull(value)) {
@@ -161,26 +109,20 @@
                         }
                         // Child to Parent
                         else if (type.isObject(value) && !value.records) {
-                            value = _.omit(value, "attributes");
-                            return '<div><pre>' + JSON.stringify(value, null, "  ") + '</pre></div>';
+                            return ('<a style="cursor: pointer;" id="{0}" type="{1}" ' + 
+                                    'onclick="showRow(this);">{1}</a>').format(
+                                id, key
+                            );
                         }
                         // Parent to Children
                         else if (type.isObject(value) && value.records) {
-                            records = _.map(value.records, function(record) {
-                                return _.omit(record, "attributes");
-                            });
-
-                            return '<a style="cursor: pointer;" onclick="showDetail(this);">Show Detail(' + records.length + 
-                                   ')</a><div style="display:none;"><pre>' + JSON.stringify(records, null, "  ") + '</pre></div>';
+                            return ('<a style="cursor: pointer;" id="{0}" type="{1}" ' + 
+                                    'onclick="showRow(this);">{1}({2})</a>').format(
+                                id, key, value.records.length
+                            );
                         }
+                        // Other
                         else {
-                            // Id value
-                            var idRegExp = new RegExp(/[a-zA-Z0-9]{15,18}/ig);
-                            if (idRegExp.test(value)) {
-                                return "<a href='/{0}/{1}'>{1}</a>".format(_type, value);
-                            }
-
-                            // Other
                             return value;
                         }
                     }
@@ -203,11 +145,13 @@
      */
     function deleteRow(ele) {
         if (confirm("Are you sure you really want to delete this row?")) {
-            record_id = $(ele).attr("id")
+            record_id = $(ele).attr("id");
+            _type = $(ele).attr("type");
             $.ajax({
-                url: '/:{0}/del'.format(record_id),
+                url: '/{0}/{1}/del'.format(_type, record_id),
                 type: 'DELETE',
                 success: function(resp) {
+                    console.log(resp);
                     if (resp.success) {
                         records = _.reject(records, function(record) {
                             return record.Id === record_id
@@ -224,21 +168,87 @@
             });
         }
     }
+
+    function updateRow(ele) {
+        record_id = $(ele).attr("id");
+        records.forEach(function(record) {
+            if (record.Id === record_id) {
+                var fields = <%- JSON.stringify(fields)%>;
+                fields = fields[object_type];
+                
+                input_area = "";
+                fields.forEach(function(field) {
+                    input_area += (
+                        '<div class="form-group">' +
+                            '<label class="control-label col-sm-3">{0}: </label>' +
+                            '<div class="col-sm-9">' +
+                                '<input type="text" id="{0}" name="{0}" class="form-control"' +
+                                    'required="true" autofocus="true" value="{1}" />' +
+                            '</div>' +
+                        '</div>'
+                    ).format(field, record[field] ? record[field] : "");
+                });
+
+                $("#editForm").html(input_area);
+                $("#edit-dialog").modal("show");
+            }
+        });
+    }
     
-    /**
-     * Show Detail if detail if not visible, else hide detail
-     * @param     {DOM Element}    ele   
-     * @return
-     */
-    function showDetail(ele) {
-        if ($(ele).text().startsWith("Show")) {
-            $(ele).next().show();
-            $(ele).text($(ele).text().replace("Show", "Hide"));
-        }
-        else {
-            $(ele).next().hide();
-            $(ele).text($(ele).text().replace("Hide", "Show"));
-        }
+    function showRow(ele) {
+        record_id = $(ele).attr("id");
+        _type = $(ele).attr("type");
+        records.forEach(function(record) {
+            console.log(record_id, record.attributes.url);
+            if (record.attributes.url.indexOf(record_id) > 0) {
+                show_area = "";
+
+                // For example, record["Owner"] or record["Opportunities"]
+                obj = record[_type];
+
+                // Parent to Child
+                if (obj.records) {
+                    obj_records = obj.records;
+                    var show_area = '<table class="table table-striped">';
+                    show_area += '<tr>';
+                    for (var k in obj_records[0]) {
+                        if (k == "attributes") continue;
+                        show_area += "<th>" + k + "</th>";
+                    }
+                    show_area += '</tr>';
+
+                    $.each(obj_records, function(index, value) {
+                        show_area += "<tr>";
+                        $.each(value, function (key, val) {
+                            if (key != "attributes") {
+                                show_area += "<td>" + val + "</td>";
+                            }
+                        });
+                        show_area += "</tr>";
+                    });
+
+                    show_area += "</table>";
+                }
+                // Child to Parent
+                else {
+                    Object.keys(obj).forEach(function(key) {
+                        if (!type.isObject(obj[key])) {
+                            show_area += (
+                                '<div class="form-group">' +
+                                    '<label class="col-sm-2 control-label">{0}:</label>' + 
+                                    '<div class="col-sm-10">' + 
+                                        '<p class="form-control-static">{1}</p>' + 
+                                    '</div>' + 
+                                '</div>'
+                            ).format(key, obj[key] ? obj[key] : "");
+                        }
+                    });
+                }
+
+                $("#showDetail-body").html(show_area);
+                $("#showDetail-dialog").modal("show");
+            }
+        });
     }
 </script>
 

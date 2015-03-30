@@ -37,3 +37,8 @@ var error_div =
         '<span class="sr-only">Error:</span>' +
         '{0}' +
     '</div>';
+
+var parseId = function(url) {
+    lastIndexOfSlash = url.lastIndexOf("/");
+    return url.substr(lastIndexOfSlash + 1, url.length);
+}
