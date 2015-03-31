@@ -13,5 +13,6 @@ var heroku_oauth2 = {
 exports.test = test_oauth2;
 exports.heroku = heroku_oauth2;
 exports.fields = {
-    "Account": ["Name", "Phone", "Website"]
+    "Account": ["Name", "Phone", "Website"],
+    "Opportunity": ["Name", "StageName", "CloseDate"]
 }

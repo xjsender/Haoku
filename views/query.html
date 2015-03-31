@@ -16,18 +16,31 @@
                         </div>
 
                         <div class="panel-body">
-                            <div class="row" id="query_div">
-                                <div class="col-sm-8" style="margin-top: 5px;">
-                                    <textarea class="form-control" rows="5" id="soql" name="soql" 
+                            <div class="row">
+                                <div class="col-sm-6" id="query_div" style="margin-top: 5px;">
+                                    <textarea class="form-control" rows="10" id="soql" name="soql" 
                                         required="true" placeholder="SELECT Id FROM Account LIMIT 50"></textarea>
+
+                                    <button type="button" id="executeQuery" style="margin-top: 5px;" class="btn btn-primary">
+                                        <span class="glyphicon glyphicon-search"></span> Query
+                                    </button>
                                 </div>
 
-                                <div class="col-sm-4">
-                                    <div class="btn-group" style="margin-top: 5px;">
-                                        <button type="button" id="executeQuery" class="btn btn-primary connect">
-                                            <span class="glyphicon glyphicon-search"></span> Query
-                                        </button>
-                                    </div>
+                                <div class="col-sm-6">
+                                    <select multiple size="12" class="form-control" id="snippets" 
+                                        title="Double click the row to paste it into query body"
+                                        data-toggle="tooltip" data-placement="top">
+                                        <optgroup label="Standard">
+                                            <option>SELECT Id, Name FROM Account LIMIT 10</option>
+                                            <option>SELECT Id, Name, StageName, CloseDate FROM Opportunity LIMIT 10</option>
+                                        </optgroup>
+
+                                        <optgroup label="Custom">
+                                            <%soqls.forEach(function(soql) {%>
+                                                <option><%- soql%></option>
+                                            <%});%>
+                                        </optgroup>
+                                    </select>
                                 </div>
                             </div>
                         </div>
@@ -56,36 +69,42 @@
     var records = [];
     var object_type = "";
 
-    $("#executeQuery").on("click", function() {
-        soql = $("#soql").val();
-        if (!soql) {
-            $("#query_div").addClass("has-error");
-            return false;
-        }
-        else {
-            $("#query_div").removeClass("has-error");
-        }
-        
-        body = {soql: soql};
+    $(function() {
+        $("#snippets").on("dblclick", function() {
+            $("#soql").val($(this).val());
+        });
 
-        $.post('/query', body, function(resp) {
-            // Error Response
-            if (type.isString(resp)) {
-                $('#query_result').html(error_div.format(resp));
-                return;
+        $("#executeQuery").on("click", function() {
+            soql = $("#soql").val();
+            if (!soql) {
+                $("#query_div").addClass("has-error");
+                return false;
             }
-
-            if (resp.totalSize == 0) {
-                $('#query_result').html("No matched records");
-                return;
+            else {
+                $("#query_div").removeClass("has-error");
             }
+            
+            body = {soql: soql};
 
-            // Keep this variable
-            records = resp.records;
-            object_type = records[0].attributes.type;
+            $.post('/query', body, function(resp) {
+                // Error Response
+                if (type.isString(resp)) {
+                    $('#query_result').html(error_div.format(resp));
+                    return;
+                }
 
-            // Initiate table
-            initiateTable(records);
+                if (resp.totalSize == 0) {
+                    $('#query_result').html("No matched records");
+                    return;
+                }
+
+                // Keep this variable
+                records = resp.records;
+                object_type = records[0].attributes.type;
+
+                // Initiate table
+                initiateTable(records);
+            });
         });
     });
 

@@ -1,5 +1,6 @@
 var jsforce = require("jsforce")
     , session = require("express-session")
+    , _ = require("underscore");
 
 exports.query = function(req, res, next) {
     res.render("query");
@@ -7,6 +8,14 @@ exports.query = function(req, res, next) {
 
 exports.doQuery = function(req, res, next) {
     var soql = req.body.soql;
+
+    // Keep the soql history
+    if (req.session.soqls && !_.contains(req.session.soqls, soql)) {
+        req.session.soqls.push(soql);
+    }
+    else {
+        req.session.soqls = [soql];
+    }
 
     var conn = new jsforce.Connection({
         accessToken: req.session.accessToken,

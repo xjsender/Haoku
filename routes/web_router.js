@@ -10,6 +10,7 @@ module.exports = function(app) {
     app.use(function(req, res, next) {
         res.locals.session = req.session;
         res.locals.fields = config.fields;
+        res.locals.soqls = req.session.soqls || [];
         next();
     });
 
