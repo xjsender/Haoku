@@ -16,7 +16,7 @@
                         </div>
 
                         <div class="panel-body">
-                            <div class="row">
+                            <div class="row" id="query_div">
                                 <div class="col-sm-8" style="margin-top: 5px;">
                                     <textarea class="form-control" rows="5" id="soql" name="soql" 
                                         required="true" placeholder="SELECT Id FROM Account LIMIT 50"></textarea>
@@ -58,6 +58,14 @@
 
     $("#executeQuery").on("click", function() {
         soql = $("#soql").val();
+        if (!soql) {
+            $("#query_div").addClass("has-error");
+            return false;
+        }
+        else {
+            $("#query_div").removeClass("has-error");
+        }
+        
         body = {soql: soql};
 
         $.post('/query', body, function(resp) {
@@ -199,7 +207,6 @@
         record_id = $(ele).attr("id");
         _type = $(ele).attr("type");
         records.forEach(function(record) {
-            console.log(record_id, record.attributes.url);
             if (record.attributes.url.indexOf(record_id) > 0) {
                 show_area = "";
 
