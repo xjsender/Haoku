@@ -39,8 +39,6 @@ app.use(function(req, res, next) {
     // expose "notLogin"
     res.locals.notLogin = !req.session || !req.session.accessToken;
 
-    // res.locals.user = req.session.user;
-
     next();
 });
 

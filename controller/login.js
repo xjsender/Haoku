@@ -4,7 +4,7 @@ var jsforce = require("jsforce")
     , util = require("./util");
 
 exports.login = function(req, res, next) {
-    oauth2 = req.hostname === "localhost" ? config.test : config.heroku;
+    oauth2 = req.hostname === "localhost" ? config.dev : config.prd;
     oauth2.loginUrl = req.body.login_url;
     req.session.oauth2 = oauth2;
 
@@ -32,12 +32,12 @@ exports.callback = function(req, res, next) {
         req.session.accessToken = conn.accessToken;
         req.session.instanceUrl = conn.instanceUrl;
 
-        soql = "SELECT Id, FirstName, LastName, UserName FROM User " +  
-               "WHERE Id = '{0}'".format(userInfo.id);
-        conn.query(soql , function(err, resp) {
+        console.log(req.session);
+        conn.chatter.resource('/users/me').retrieve(function(err, resp) {
+            console.log(resp);
             if (err) return next(err);
-            req.session.userInfo = resp.records[0];
+            req.session.userInfo = resp;
             res.redirect("/");
-        });
+        })
     });
 }

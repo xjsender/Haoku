@@ -2,11 +2,11 @@ var jsforce = require("jsforce")
     , session = require("express-session")
     , _ = require("underscore");
 
-exports.query = function(req, res, next) {
+exports.index = function(req, res, next) {
     res.render("query");
 }
 
-exports.doQuery = function(req, res, next) {
+exports.executeQuery = function(req, res, next) {
     var soql = req.body.soql;
 
     // Keep the soql history
@@ -23,6 +23,7 @@ exports.doQuery = function(req, res, next) {
     });
 
     conn.query(soql, function(err, resp) {
+        console.log(err);
         if (err) return res.send(err.toString());
 
         res.send(resp);

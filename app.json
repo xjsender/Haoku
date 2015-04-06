@@ -1,9 +1,9 @@
 {
-  "name": "Haoku",
-  "description": "Salesforce Tool",
-  "repository": "https://github.com/xjsender/Haoku",
-  "website": "https://haoku.herokuapp.com",
-  "logo": "https://avatars3.githubusercontent.com/u/1450977?v=3&s=40",
-  "keywords": ["node", "haoku", "rest", "query", "utilities"],
-  "env": {}
+    "name": "Haoku",
+    "description": "Salesforce Tool",
+    "repository": "https://github.com/xjsender/Haoku",
+    "website": "https://haoku.herokuapp.com",
+    "logo": "https://avatars3.githubusercontent.com/u/1450977?v=3&s=40",
+    "keywords": ["node", "haoku", "rest", "query", "utilities"],
+    "env": {}
 }

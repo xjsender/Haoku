@@ -1,15 +1,10 @@
 var jsforce = require("jsforce")
     , session = require("express-session")
+    , config = require("../config")
 
-exports.rest = function(req, res, next) {
-    var conn = new jsforce.Connection({
-        accessToken: req.session.accessToken,
-        instanceUrl: req.session.instanceUrl
-    });
-
+exports.index = function(req, res, next) {
     res.render('rest', {
-        rest_uri: "/services/data/v" + conn.version + "/sobjects",
-        resp: {}
+        rest_uri: "/services/data/v" + config.apiVersion + "/sobjects"
     });
 }
 

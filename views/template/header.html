@@ -59,6 +59,7 @@
                         <!-- <li><a href="/account/o">Account</a></li> -->
                         <li><a href="/rest">Rest</a></li>
                         <li><a href="/jsonu">JSON</a></li>
+                        <li><a href="/apex">Apex</a></li>
                         <li class="dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" 
                                 aria-expanded="false">Tools <span class="caret"></span></a>
@@ -82,20 +83,20 @@
                         <% if (!session.accessToken) { %>
                             <li>
                                 <a href="#" onclick="$('#oauth-dialog').modal('show');">
-                                    <span class="glyphicon glyphicon-log-in"></span> Login
+                                    <span class="fa fa-sign-in"></span> Login
                                 </a>
                             </li>
                         <%} else {%>
                             <li>
                                 <a href="#" id="logout">
-                                    <span class="glyphicon glyphicon glyphicon-user"></span> 
+                                    <span class="fa fa-sign-out"></span> 
                                     Logout as <%- session.userInfo.Username %>
                                 </a>
                             </li>
                         <%}%>
                         <li>
                             <a target="_blank" href="https://github.com/xjsender/Haoku">
-                                <span class="glyphicon glyphicon-heart"></span>
+                                <span class="fa fa-github"></span>
                                 Github
                             </a>
                         </li>

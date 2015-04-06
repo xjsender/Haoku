@@ -1,0 +1,133 @@
+<% include ./template/header.html %>
+
+<div class="container">
+    <div class="col-sm-12">
+        <h2>Execute Anonymous</h2>
+    </div>
+
+    <% if (notLogin) { %>
+        <% include ./template/notLogin.html %>
+    <%} else { %>
+        <form name="form">
+            <div class="form-group col-sm-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Place HTTP method, REST URI and Body here: </h3>
+                    </div>
+
+                    <div class="panel-body">
+                        <div class="btn-group btn-group-sm" data-toggle="buttons" 
+                                data-placement="top" title="Choose Your Log Level">
+
+                            <label class="radioBtn btn btn-default">
+                                <input type="radio" id="database" name="log_category" value="DB" /> Database
+                            </label>
+
+                            <label class="radioBtn btn btn-default">
+                                <input type="radio" id="workflow" name="log_category" value="Workflow" /> Workflow
+                            </label>
+
+                            <label class="radioBtn btn btn-default">
+                                <input type="radio" id="validation" name="log_category" value="Validation" /> Validation
+                            </label>
+
+                            <label class="radioBtn btn btn-default">
+                                <input type="radio" id="callout" name="log_category" value="Callout" /> Callout
+                            </label>
+
+                            <label class="radioBtn btn btn-default active">
+                                <input type="radio" id="apex_code" name="log_level" value="Apex_Code" checked="true" /> Apex Code
+                            </label>
+
+                            <label class="radioBtn btn btn-default">
+                                <input type="radio" id="apex_profiling" name="log_level" value="Apex_Profiling" /> Apex Profiling
+                            </label>
+                        </div>
+                        <br />
+
+                        <div class="btn-group btn-group-sm" data-toggle="buttons" 
+                            data-placement="top" title="Choose Your Log Category">
+
+                            <label class="radioBtn btn btn-default">
+                                <input type="radio" id="error" name="log_level" value="Error" /> Error
+                            </label>
+
+                            <label class="radioBtn btn btn-default">
+                                <input type="radio" id="warn" name="log_level" value="Warn" /> Warn
+                            </label>
+
+                            <label class="radioBtn btn btn-default">
+                                <input type="radio" id="info" name="log_level" value="Info" /> Info
+                            </label>
+
+                            <label class="radioBtn btn btn-default active">
+                                <input type="radio" id="debug" name="log_level" value="Debug" checked="true" /> Debug
+                            </label>
+                            
+                            <label class="radioBtn btn btn-default">
+                                <input type="radio" id="fine" name="log_category" value="Fine" /> Fine
+                            </label>
+
+                            <label class="radioBtn btn btn-default">
+                                <input type="radio" id="finer" name="log_category" value="Finer" /> Finer
+                            </label>
+
+                            <label class="radioBtn btn btn-default">
+                                <input type="radio" id="finest" name="log_category" value="Finest" /> Finest
+                            </label>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-sm-8" style="margin-top:5px;">
+                                <textarea class="form-control" rows="10" cols="10" id="apex_body" name="apex_body" 
+                                    placeholder="Place your body here"></textarea>
+                            </div>
+
+                            <div class="col-sm-4">
+                                <div class="btn-group" style="margin-top: 5px;">
+                                    <button type="button" id="executeAnonymous" tabindex="0" class="btn btn-primary connect">
+                                        <span class="glyphicon glyphicon-ok"></span> Execute Anonymous
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+
+        <div class="col-sm-12">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Execution Result:</h3>
+                </div>
+
+                <div class="panel-body" id="result">
+                </div>
+            </div>
+        </div>
+    <%}%>
+</div>
+
+<script>
+    $(function() {
+        $("#executeAnonymous").on("click", function() {
+            log_category = $("#log_category").val();
+            log_level = $("#log_level").val();
+            apex_body = $("#apex_body").val();
+            
+            var body = {
+                logCategory : log_category,
+                logLevel : log_level,
+                apexCode : apex_body
+            };
+
+            $.post('/apex', body, function(resp) {
+                $("#result").html('<pre>{0}</pre>'.format(resp));
+            });
+        });
+    });
+</script>
+
+<div style="height: 50px;" />
+<% include ./template/footer.html %>

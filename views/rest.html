@@ -16,7 +16,7 @@
                     </div>
 
                     <div class="panel-body">
-                        <div class="btn-group btn-group-xs" data-toggle="buttons">
+                        <div class="btn-group btn-group-sm" data-toggle="buttons">
                             <label class="radioBtn btn btn-default active">
                                 <input type="radio" id="get" name="rest_method" value="get" checked="true" /> Get
                             </label>
@@ -183,7 +183,7 @@
             $.post('/rest', body, function(resp) {
                 if (type.isString(resp)) {
                     $("#control").hide();
-                    $("#Canvas").html(error_div.format(resp));
+                    $("#Canvas").html(resp);
                     return;
                 }
 

@@ -3,6 +3,7 @@ var express = require("express")
     , login = require("../controller/login")
     , query = require("../controller/query")
     , rest = require("../controller/rest")
+    , apex = require("../controller/apex")
     , account = require("../controller/object/account")
     , config = require("../config")
 
@@ -17,15 +18,24 @@ module.exports = function(app) {
     app.get('/', entry.index);
     app.get('/about', entry.about);
 
-    // Query routes
-    app.get('/query', query.query);
-    app.post('/query', query.doQuery);
-
     // http://download.csdn.net/detail/wolf_410/5927367
     // REST routes
     app.get('/jsonu', entry.json);
-    app.get('/rest', rest.rest);
-    app.post('/rest', rest.executeRest);
+
+    // Query router
+    app.route("/query")
+        .get(query.index)
+        .post(query.executeQuery);
+
+    // Rest router
+    app.route("/rest")
+        .get(rest.index)
+        .post(rest.executeRest);
+
+    // Apex router
+    app.route("/apex")
+        .get(apex.index)
+        .post(apex.executeAnonymous);
 
     // Login routes
     app.post('/login', login.login);
