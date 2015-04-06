@@ -123,7 +123,7 @@
             };
 
             $.post('/apex', body, function(resp) {
-                $("#result").html('<pre>{0}</pre>'.format(resp));
+                $("#result").html('<pre>{0}</pre>'.format(JSON.stringify(resp, null, "  ")));
             });
         });
     });

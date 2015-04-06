@@ -32,9 +32,7 @@ exports.callback = function(req, res, next) {
         req.session.accessToken = conn.accessToken;
         req.session.instanceUrl = conn.instanceUrl;
 
-        console.log(req.session);
         conn.chatter.resource('/users/me').retrieve(function(err, resp) {
-            console.log(resp);
             if (err) return next(err);
             req.session.userInfo = resp;
             res.redirect("/");
