@@ -12,6 +12,7 @@ module.exports = function(app) {
         res.locals.session = req.session;
         res.locals.fields = config.fields;
         res.locals.soqls = req.session.soqls || [];
+        res.locals.notLogin = !req.session || !req.session.accessToken;
         next();
     });
 

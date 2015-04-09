@@ -42,3 +42,16 @@ var parseId = function(url) {
     lastIndexOfSlash = url.lastIndexOf("/");
     return url.substr(lastIndexOfSlash + 1, url.length);
 }
+
+function queryString(key){
+    var paras = location.search;
+    if(paras){
+        var arr = paras.substr(1).split("&"),data;
+        for(i in arr){
+            data = arr[i].split("=");
+            if(data[0] == key){
+                return data[1]
+            }
+        }
+    }
+}

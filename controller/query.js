@@ -23,7 +23,6 @@ exports.executeQuery = function(req, res, next) {
     });
 
     conn.query(soql, function(err, resp) {
-        console.log(err);
         if (err) return res.send(err.toString());
 
         res.send(resp);

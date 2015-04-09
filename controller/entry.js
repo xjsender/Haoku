@@ -7,8 +7,14 @@ exports.index = function(req, res, next) {
         req.session.accessToken = req.query.accessToken;
         req.session.instanceUrl = req.query.instanceUrl;
         req.session.userInfo = {
-            Username: req.query.userName
+            username: req.query.username
         };
+    }
+
+    if (req.query.router) {
+        res.locals.session = req.session;
+        res.locals.notLogin = !req.session || !req.session.accessToken;
+        return res.redirect(req.query.router);
     }
     
     res.render('index');

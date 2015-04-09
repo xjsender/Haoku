@@ -74,7 +74,18 @@
             $("#soql").val($(this).val());
         });
 
+        var param = queryString("param");
+        console.log(param);
+        if (param) {
+            $("#soql").val(decodeURIComponent(param));
+            executeQuery();
+        }
+
         $("#executeQuery").on("click", function() {
+            executeQuery();
+        });
+
+        function executeQuery() {
             soql = $("#soql").val();
             if (!soql) {
                 $("#query_div").addClass("has-error");
@@ -105,7 +116,7 @@
                 // Initiate table
                 initiateTable(records);
             });
-        });
+        }
     });
 
     function initiateTable(records) {
