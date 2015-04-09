@@ -114,12 +114,12 @@
                 object_type = records[0].attributes.type;
 
                 // Initiate table
-                initiateTable(records);
+                buildTable(records);
             });
         }
     });
 
-    function initiateTable(records) {
+    function buildTable(records) {
         schema = [];
         schema.push({
             "header": "Action",
@@ -137,6 +137,7 @@
                 schema.push({
                     "header": key, 
                     "key": key,
+                    "hide": key === "attributes",
                     "template": function(row, key) {
                         value = row[key];
                         id = parseId(row.attributes.url);
@@ -167,8 +168,11 @@
                 })
             }
         });
-
+    
+        // Before draw table, destroy it firstly
         $('#query_result').data('columns', null);
+
+        // Draw table
         $('#query_result').columns({
             size: 10,
             data: records,
@@ -195,7 +199,7 @@
                             return record.Id === record_id
                         });
 
-                        initiateTable(records);
+                        buildTable(records);
 
                         alert("Delete Succeed");
                     }

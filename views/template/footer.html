@@ -22,9 +22,6 @@
 
         <script>
             $(function() {
-                var url = document.location.pathname;
-                $('.nav a[href="'+url+'"]').parent().addClass('active');
-
                 hljs.configure({languages: ['javascript', 'json', 'html']});
                 $('pre code').each(function(i, element) {
                     hljs.highlightBlock(element);
