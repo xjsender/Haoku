@@ -4,7 +4,7 @@ var jsforce = require("jsforce")
 
 exports.index = function(req, res, next) {
     res.render('rest', {
-        rest_uri: "/services/data/v" + config.apiVersion + "/sobjects"
+        rest_uri: "/services/data/v" + config.apiVersion + ".0/sobjects"
     });
 }
 
