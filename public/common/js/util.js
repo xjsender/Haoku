@@ -51,7 +51,7 @@ var parseId = function(url) {
 function getURLParameter(key){
     var search = location.search;
 
-    var reg = new RegExp("(^|&)" + parm + "=([^&]*)(&|$)");
+    var reg = new RegExp("(^|&)" + key + "=([^&]*)(&|$)");
     var r = search.substr(search.indexOf("\?") + 1).match(reg);
     if (r != null) return unescape(r[2]);
     return null;
