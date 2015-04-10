@@ -43,15 +43,16 @@ var parseId = function(url) {
     return url.substr(lastIndexOfSlash + 1, url.length);
 }
 
-function queryString(key){
-    var paras = location.search;
-    if(paras){
-        var arr = paras.substr(1).split("&"),data;
-        for(i in arr){
-            data = arr[i].split("=");
-            if(data[0] == key){
-                return data[1]
-            }
-        }
-    }
+/**
+ * Get parameter from location search
+ * @param   {string}  key  Parameter name
+ * @return  {string}       Parameter value
+ */
+function getURLParameter(key){
+    var search = location.search;
+
+    var reg = new RegExp("(^|&)" + parm + "=([^&]*)(&|$)");
+    var r = search.substr(search.indexOf("\?") + 1).match(reg);
+    if (r != null) return unescape(r[2]);
+    return null;
 }

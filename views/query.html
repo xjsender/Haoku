@@ -74,7 +74,7 @@
             $("#soql").val($(this).val());
         });
 
-        var param = queryString("param");
+        var param = getURLParameter("param");
         console.log(param);
         if (param) {
             $("#soql").val(decodeURIComponent(param));
@@ -133,40 +133,38 @@
         })
 
         Object.keys(records[0]).forEach(function(key) {
-            if (key != "Id") {
-                schema.push({
-                    "header": key, 
-                    "key": key,
-                    "hide": key === "attributes",
-                    "template": function(row, key) {
-                        value = row[key];
-                        id = parseId(row.attributes.url);
+            schema.push({
+                "header": key, 
+                "key": key,
+                "hide": key === "attributes",
+                "template": function(row, key) {
+                    value = row[key];
+                    id = parseId(row.attributes.url);
 
-                        // Null value
-                        if (type.isNull(value)) {
-                            return "";
-                        }
-                        // Child to Parent
-                        else if (type.isObject(value) && !value.records) {
-                            return ('<a style="cursor: pointer;" id="{0}" type="{1}" ' + 
-                                    'onclick="showRow(this);">{1}</a>').format(
-                                id, key
-                            );
-                        }
-                        // Parent to Children
-                        else if (type.isObject(value) && value.records) {
-                            return ('<a style="cursor: pointer;" id="{0}" type="{1}" ' + 
-                                    'onclick="showRow(this);">{1}({2})</a>').format(
-                                id, key, value.records.length
-                            );
-                        }
-                        // Other
-                        else {
-                            return value;
-                        }
+                    // Null value
+                    if (type.isNull(value)) {
+                        return "";
                     }
-                })
-            }
+                    // Child to Parent
+                    else if (type.isObject(value) && !value.records) {
+                        return ('<a style="cursor: pointer;" id="{0}" type="{1}" ' + 
+                                'onclick="showRow(this);">{1}</a>').format(
+                            id, key
+                        );
+                    }
+                    // Parent to Children
+                    else if (type.isObject(value) && value.records) {
+                        return ('<a style="cursor: pointer;" id="{0}" type="{1}" ' + 
+                                'onclick="showRow(this);">{1}({2})</a>').format(
+                            id, key, value.records.length
+                        );
+                    }
+                    // Other
+                    else {
+                        return value;
+                    }
+                }
+            });
         });
     
         // Before draw table, destroy it firstly
