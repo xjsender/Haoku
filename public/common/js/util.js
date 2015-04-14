@@ -12,18 +12,9 @@ var type = function (o){
         return s.match(/\[object (.*?)\]/)[1].toLowerCase();
 };
 
-['Null',
- 'Undefined',
- 'Object',
- 'Array',
- 'String',
- 'Number',
- 'Boolean',
- 'Function',
- 'RegExp',
- 'Element',
- 'NaN',
- 'Infinite'
+[
+    'Null', 'Undefined', 'Object', 'Array', 'String', 'Number', 
+    'Boolean', 'Function', 'RegExp', 'Element', 'NaN', 'Infinite'
 ].forEach(function (t) {
     type['is' + t] = function (o) {
         return type(o) === t.toLowerCase();

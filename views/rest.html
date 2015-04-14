@@ -42,10 +42,22 @@
                             </label> 
                         </div>
 
+                        <div class="btn-group btn-group-sm">
+                            <button type="button" id="showHeader" class="btn btn-default">
+                                Show Header
+                            </button>
+                        </div>
+
+                        <div class="row" id="headerDiv" style="display:none;">
+                            <div class="col-sm-8" style="margin-top: 5px;">
+                                <textarea class="form-control" rows="5" cols="10" id="rest_header" name="rest_header"><%- JSON.stringify(rest.header, null, '  ')%></textarea>
+                            </div>
+                        </div>
+
                         <div class="row">
                             <div class="col-sm-8" style="margin-top: 5px;">
                                 <input type="text" class="form-control" id="rest_uri" name="rest_uri" 
-                                    required="true" value="<%- rest_uri %>"></textarea>
+                                    required="true" value="<%- rest.uri %>"></textarea>
                             </div>
 
                             <div class="col-sm-4">
@@ -57,7 +69,7 @@
                             </div>
                         </div>
 
-                        <div id="rest_body_div" class="row" style="display: none; ">
+                        <div id="restBodyDiv" class="row" style="display: none; ">
                             <div class="col-sm-8" style="margin-top:5px;">
                                 <textarea class="form-control" rows="10" cols="10" id="rest_body" name="rest_body" 
                                     placeholder="Place your body here"></textarea>
@@ -140,11 +152,23 @@
         $(".radioBtn").on("click", function() {
             rest_method = $(this).children().val();
             if ($.inArray(rest_method, ["post", "patch", "put"]) != -1) {
-                $("#rest_body_div").show();
+                $("#restBodyDiv").show();
                 $("#rest_body").focus();
             }
             else {
-                $("#rest_body_div").hide();
+                $("#restBodyDiv").hide();
+            }
+        })
+
+        // Show or Hide header textarea div
+        $("#showHeader").on("click", function() {
+            if ($("#headerDiv").is(":visible")) {
+                $("#headerDiv").hide();
+                $(this).html("Show Header");
+            }
+            else {
+                $("#headerDiv").show();
+                $(this).html("Hide Header");
             }
         })
 
@@ -159,11 +183,11 @@
 
         $("#executeRest").on("click", function() {
             if ($("#rest_body").is(":visible") && !$("#rest_body").val()) {
-                $("#rest_body_div").addClass("has-error");
+                $("#restBodyDiv").addClass("has-error");
                 return false;
             }
             else {
-                $("#rest_body_div").removeClass("has-error");
+                $("#restBodyDiv").removeClass("has-error");
             }
 
             executeRest();
@@ -173,11 +197,13 @@
             rest_method = $(".radioBtn.active").children().val();
             rest_url = $("#rest_uri").val();
             rest_body = $("#rest_body").val();
+            rest_header = $("#rest_header").val();
             
             var body = {
                 method: rest_method,
                 url: rest_url,
-                body: rest_body
+                body: rest_body,
+                header: rest_header
             }
 
             $.post('/rest', body, function(resp) {

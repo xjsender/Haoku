@@ -4,7 +4,12 @@ var jsforce = require("jsforce")
 
 exports.index = function(req, res, next) {
     res.render('rest', {
-        rest_uri: "/services/data/v" + config.apiVersion + ".0/sobjects"
+        "rest": {
+            "uri": "/services/data/v" + config.apiVersion + ".0/sobjects",
+            "header": {
+                "Content-Type" : "application/json"
+            }
+        }
     });
 }
 
@@ -13,9 +18,7 @@ exports.executeRest = function(req, res, next) {
         url: req.body.url,
         method: req.body.method,
         body: req.body.body,
-        headers : {
-            "Content-Type" : "application/json"
-        }
+        headers : JSON.parse(req.body.header)
     }
 
     console.log(_request);
