@@ -75,9 +75,8 @@
         });
 
         var param = getURLParameter("param");
-        console.log(param);
         if (param) {
-            $("#soql").val(decodeURIComponent(param));
+            $("#soql").val(param);
             executeQuery();
         }
 
