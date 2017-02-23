@@ -7,7 +7,9 @@ exports.index = function(req, res, next) {
         "rest": {
             "uri": "/services/data/v" + config.apiVersion + ".0/sobjects",
             "header": {
-                "Content-Type" : "application/json"
+                "Content-Type": "application/json",
+                "Authorization": "OAuth " + req.session.accessToken,
+                "Accept": "application/json"
             }
         }
     });
